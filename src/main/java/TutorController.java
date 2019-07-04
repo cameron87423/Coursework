@@ -52,4 +52,14 @@ public class TutorController {
                 System.out.println(e.getMessage());
             }
         }
+
+    public static void Tdelete(int TutorID){
+        try{
+            PreparedStatement ps = Main.db.prepareStatement("DELETE FROM Tutors WHERE TutorID = ?");
+            ps.setInt(1,TutorID);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
