@@ -26,24 +26,10 @@ public class InformationController {
     public static void Iinsert(double Hours, double TPay){
         try{
             PreparedStatement ps = Main.db.prepareStatement("INSERT INTO Information () VALUES(?,?,?)");
-            ps.setString(1, PFName);
-            ps.setString(2, PSName);
-            ps.setInt(3, StudentID);
             ps.executeUpdate();
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
     }
 
-    public static void Pupdate(String PFName, String PSName, int StudentID){
-        try {
-            PreparedStatement ps = Main.db.prepareStatement("UPDATE Parents SET PFName = ?, PSName = ?, StudentID = ? WHERE ParentID = ?");
-            ps.setString(1, PFName);
-            ps.setString(2, PSName);
-            ps.setInt(3, StudentID);
-            ps.executeUpdate();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
 }
