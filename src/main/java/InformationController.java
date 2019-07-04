@@ -2,7 +2,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class InformationController {
-    public static void Iselect() {
+    public static void Iselect() {   //test
         try {
             PreparedStatement ps = Main.db.prepareStatement("SELECT * FROM Information");
             ResultSet results = ps.executeQuery();
