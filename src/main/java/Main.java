@@ -2,23 +2,105 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Scanner;
 
 import org.sqlite.SQLiteConfig;
-public class Main {
+public class Main {//program in the rest of the selection menu and function
 
     public static Connection db = null;// behaves as a global variable
     //this is the main method
     public static void main(String[] args) {
-        openDatabase("courseworkDB.db"); // code to get data from, write to the database etc goes here...
-        select();
-        String FName = "James";
-        String SName = "Bishop";
-        String DoB = "22/03/2002";
-        String Gender = "male";
-        String Address1 = "1 Grange Lane";
-        String Address2 = "Hook";
-        insert(FName,SName,DoB,Gender,Address1,Address2);
-        closeDatabase();
+        Scanner sc = new Scanner(System.in);
+        try {
+            System.out.println("Which controller do you want to access?");
+            System.out.println("1 student, 2 tutor, 3 parent, 4 Subject, 5 session, 6 information: ");
+            int opt1 = sc.nextInt();
+            System.out.println("What function do you want to do?");
+            System.out.println("1 read, 2 create, 3 update, 4 delete: ");
+            int opt2 = sc.nextInt();
+
+
+            openDatabase("courseworkDB.db"); // code to get data from, write to the database etc goes here...
+            if (opt1 == 1) {
+                if (opt2 == 1) {
+                    StudentController.select();
+                } else if (opt2 == 2) {
+                    //create function for these terms each
+                    sc.nextLine();
+                    System.out.println("enter FName: ");
+                    String FName = sc.nextLine();
+                    System.out.println("enter SName: ");
+                    String SName = sc.nextLine();
+                    System.out.println("enter Age: ");
+                    int Age = sc.nextInt();
+                    sc.nextLine();
+                    System.out.println("enter Gender: ");
+                    String Gender = sc.nextLine();
+                    System.out.println("enter Address1: ");
+                    String Address1 = sc.nextLine();
+                    System.out.println("enter Address2: ");
+                    String Address2 = sc.nextLine();
+                    System.out.println(FName + " " + SName + " " + Age + " " + Gender + " " + Address1 + " " + Address2);
+                    StudentController.insert(FName, SName, Age, Gender, Address1, Address2);
+
+                } else if (opt2 == 3) {
+                    System.out.println();
+                    sc.nextLine();
+                    System.out.println("enter FName: ");
+                    String FName = sc.nextLine();
+                    System.out.println("enter SName: ");
+                    String SName = sc.nextLine();
+                    System.out.println("enter Age: ");
+                    int Age = sc.nextInt();
+                    sc.nextLine();
+                    System.out.println("enter Gender: ");
+                    String Gender = sc.nextLine();
+                    System.out.println("enter Address1: ");
+                    String Address1 = sc.nextLine();
+                    System.out.println("enter Address2: ");
+                    String Address2 = sc.nextLine();
+                    System.out.println("enter search ID: ");
+                    int StudentID = sc.nextInt();
+                    sc.nextLine();
+                    StudentController.update(FName, SName, Age, Gender, Address1, Address2, StudentID);
+                } else if (opt2 == 4) {
+                    System.out.println();
+                    System.out.println("enter search ID: ");
+                    int StudentID = sc.nextInt();
+                    sc.nextLine();
+                    StudentController.delete(StudentID);
+                }
+            } else if (opt1 == 2) {
+                if (opt2 == 3) {
+                    sc.nextLine();
+                    System.out.println("enter FName: ");
+                    String TFName = sc.nextLine();
+                    System.out.println("enter SName: ");
+                    String TSName = sc.nextLine();
+                    System.out.println("enter Gender: ");
+                    String Gender = sc.nextLine();
+                    System.out.println("enter Experience in years: ");
+                    int Experience = sc.nextInt();
+                    sc.nextLine();
+                    System.out.println("enter Rating: ");
+                    double Rating = sc.nextDouble();
+                    System.out.println("enter TutorID: ");
+                    int TutorID = sc.nextInt();
+                    TutorController.Tupdate(TFName, TSName, Gender, Experience, Rating, TutorID);
+                }
+                if (opt2 == 4) {
+                    System.out.println("enter search ID: ");
+                    int TutorID = sc.nextInt();
+                    sc.nextLine();
+                    TutorController.Tdelete(TutorID);
+                }
+            }
+
+
+            closeDatabase();
+        }catch(Exception e){
+            System.out.println("Selection error: " + e.getMessage() + " Please enter an appropriate value next time");
+        }
     }
     //this opens the database
     private static void openDatabase(String dbFile) {
@@ -33,51 +115,6 @@ public class Main {
         }
 
     }
-
-    public static void select() {
-        try {
-            PreparedStatement ps = db.prepareStatement("SELECT StudentID, FName, SName, DoB, Gender, Address1, Address2 FROM Students");
-            ResultSet results = ps.executeQuery();
-            while (results.next()) {
-                int StudentID = results.getInt(1);
-                String FName = results.getString(2);
-                String SName = results.getString(3);
-                String DoB = results.getString(4);
-                String Gender = results.getString(5);
-                String Address1 = results.getString(6);
-                String Address2 = results.getString(7);
-                System.out.println(StudentID + " " + FName + " "+ SName + " " + DoB + " " + Gender + " " + Address1 + " " + Address2);
-
-            }
-        } catch (Exception exception) {
-            System.out.println("Database error: " + exception.getMessage());
-        }
-    }
-
-    public static void insert(String FName, String SName, String DoB, String Gender, String Address1, String Address2){
-        try{
-            PreparedStatement ps = db.prepareStatement("INSERT INTO Students (FName, SName, DoB, Gender, Address1, Address2) VALUES(?,?,?,?,?,?)");
-            ps.setString(1, FName);
-            ps.setString(2, SName);
-            ps.setString(3, DoB);
-            ps.setString(4, Gender);
-            ps.setString(5, Address1);
-            ps.setString(6, Address2);
-
-            ps.executeUpdate();
-        }catch (Exception exception){
-            System.out.println(exception.getMessage());
-        }
-    }
-
-    public static void update(){
-
-    }
-
-    public static void delete(){
-
-    }
-
     // this closes the database
     private static void closeDatabase(){
         try {
