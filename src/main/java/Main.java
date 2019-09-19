@@ -9,7 +9,7 @@ public class Main {//program in the rest of the selection menu and function
 
     public static Connection db = null;// behaves as a global variable
     //this is the main method
-    public static void main(String[] args) {
+    public static void main(String[] args) {//delete this comment
         Scanner sc = new Scanner(System.in);
         try {
             System.out.println("Which controller do you want to access?");

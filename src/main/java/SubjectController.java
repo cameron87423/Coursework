@@ -1,7 +1,7 @@
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class SubjectController {
+public class SubjectController {//delete this comment
     public static void Subselect() {
         try {
             PreparedStatement ps = Main.db.prepareStatement("SELECT SubjectN,StudentID,TutorID FROM Subject");
