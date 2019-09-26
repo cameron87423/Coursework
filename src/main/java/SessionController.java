@@ -1,7 +1,7 @@
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class SessionController {
+public class SessionController {//n
     public static void Sselect() {
         try {
             PreparedStatement ps = Main.db.prepareStatement("SELECT StudentID,TutorID,Review,Hours,Pay,Grade FROM Sessions");
