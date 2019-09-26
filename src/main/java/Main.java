@@ -9,7 +9,7 @@ public class Main {//program in the rest of the selection menu and function
 
     public static Connection db = null;// behaves as a global variable
     //this is the main method
-    public static void main(String[] args) {//n
+    public static void main(String[] args) {//no
         Scanner sc = new Scanner(System.in);
         try {
             openDatabase("courseworkDB.db"); // code to get data from, write to the database etc goes here...
