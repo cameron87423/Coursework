@@ -2,7 +2,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class SessionController {
-    public static void Sselect() {
+    public static void Sselect() {//no
         try {
             PreparedStatement ps = Main.db.prepareStatement("SELECT StudentID,TutorID,Review,Hours,Pay,Grade FROM Sessions");
             ResultSet results = ps.executeQuery();
