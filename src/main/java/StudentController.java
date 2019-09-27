@@ -1,6 +1,6 @@
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-public class StudentController {//delete this comment
+public class StudentController {
     public static void select() {
         try {
             PreparedStatement ps = Main.db.prepareStatement("SELECT FName,SName,Age,Address1,Address2 FROM Students");
@@ -18,18 +18,20 @@ public class StudentController {//delete this comment
         }
     }
 
-    public static void pick(String FName) {
+    public static void pick(int StudentID) {
         try {
-            PreparedStatement ps = Main.db.prepareStatement("SELECT FName,SName,Age,Address1,Address2 FROM Students WHERE FName = ?");
+            PreparedStatement ps = Main.db.prepareStatement("SELECT StudentID,FName,SName,Age,Address1,Address2 FROM Students WHERE StudentID = ?");
+            ps.setInt(1,StudentID);
             ResultSet results = ps.executeQuery();
-            ps.setString(1,FName);
-            FName = results.getString(1);
-            String SName = results.getString(2);
-            int Age = results.getInt(3);
-            String Address1 = results.getString(4);
-            String Address2 = results.getString(5);
-            System.out.println(FName + " "+ SName + " " + Age + " " + Address1 + " " + Address2);
+            while (results.next()) {
+                String FName = results.getString(2);
+                String SName = results.getString(3);
+                int Age = results.getInt(4);
+                String Address1 = results.getString(5);
+                String Address2 = results.getString(6);
+                System.out.println(FName + " " + SName + " " + Age + " " + Address1 + " " + Address2);
             }
+        }
         catch (Exception e){
             System.out.println("Database error: " + e.getMessage() + " Please contact help@StuTu.com for more information");
         }

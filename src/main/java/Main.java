@@ -9,18 +9,18 @@ public class Main {//program in the rest of the selection menu and function
 
     public static Connection db = null;// behaves as a global variable
     //this is the main method
-    public static void main(String[] args) {//delete this comment
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         try {
+            openDatabase("courseworkDB.db"); // code to get data from, write to the database etc goes here...
             System.out.println("Which controller do you want to access?");
             System.out.println("1 student, 2 tutor, 3 parent, 4 Subject, 5 session, 6 information: ");
             int opt1 = sc.nextInt();
             System.out.println("What function do you want to do?");
-            System.out.println("1 read, 2 create, 3 update, 4 delete: ");
+            System.out.println("1 read, 2 create, 3 update, 4 delete, 5 pick: ");
             int opt2 = sc.nextInt();
 
 
-            openDatabase("courseworkDB.db"); // code to get data from, write to the database etc goes here...
             if (opt1 == 1) {
                 if (opt2 == 1) {
                     StudentController.select();
@@ -69,6 +69,10 @@ public class Main {//program in the rest of the selection menu and function
                     int StudentID = sc.nextInt();
                     sc.nextLine();
                     StudentController.delete(StudentID);
+                } else if (opt2 == 5) {
+                    System.out.println("enter search ID: ");
+                    int StudentID = sc.nextInt();
+                    StudentController.pick(StudentID);
                 }
             } else if (opt1 == 2) {
                 if (opt2 == 3) {

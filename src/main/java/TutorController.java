@@ -1,7 +1,7 @@
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class TutorController {//delete this comment
+public class TutorController {
         public static void Tselect() {
             try {
                 PreparedStatement ps = Main.db.prepareStatement("SELECT TFName,TSName,Gender,Experience,Rating FROM Tutors");
