@@ -1,7 +1,7 @@
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class InformationController {//n
+public class InformationController {
     public static void Iselect() {   //test
         try {
             PreparedStatement ps = Main.db.prepareStatement("SELECT THours,TPay,RPay,TGrade,StudentID,TutorID FROM Information");

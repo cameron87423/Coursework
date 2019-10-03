@@ -1,6 +1,6 @@
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-public class StudentController {//n
+public class StudentController {
     public static void select() {
         try {
             PreparedStatement ps = Main.db.prepareStatement("SELECT FName,SName,Age,Address1,Address2 FROM Students");
@@ -31,7 +31,7 @@ public class StudentController {//n
                 String Address2 = results.getString(6);
                 System.out.println(FName + " " + SName + " " + Age + " " + Address1 + " " + Address2);
             }
-            }
+        }
         catch (Exception e){
             System.out.println("Database error: " + e.getMessage() + " Please contact help@StuTu.com for more information");
         }
