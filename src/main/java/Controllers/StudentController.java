@@ -1,20 +1,41 @@
+package Controllers;
+
+import Server.Main;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
+@Path("Students/")
 public class StudentController {
-    public static void select() {
+
+    @GET
+    @Path("List")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String select() {
+        System.out.println("Students/list");
+        JSONArray list = new JSONArray();
         try {
             PreparedStatement ps = Main.db.prepareStatement("SELECT FName,SName,Age,Address1,Address2 FROM Students");
             ResultSet results = ps.executeQuery();
             while (results.next()) {
-                String FName = results.getString(1);
-                String SName = results.getString(2);
-                int Age = results.getInt(3);
-                String Address1 = results.getString(4);
-                String Address2 = results.getString(5);
-                System.out.println(FName + " "+ SName + " " + Age + " " + Address1 + " " + Address2);
+                JSONObject item = new JSONObject();
+                item.put("Name", results.getString(1));
+                item.put("Surname", results.getString(2));
+                item.put("Age", results.getInt(3));
+                item.put("Address1", results.getString(4));
+                item.put("Address2", results.getString(5));
+                list.add(item);
             }
+            return list.toString();
         } catch (Exception e) {
-            System.out.println("Database error: " + e.getMessage() + " Please contact help@StuTu.com for more information");
+            System.out.println("Database error: " + e.getMessage());
+            return "{\"error\": \"Unable to list items, please see server console for more info.\"}";
         }
     }
 
