@@ -25,12 +25,12 @@ public class Main {//program in the rest of the selection menu and function
 
         openDatabase("courseworkDB.db");
 
-        ResourceConfig config = new ResourceConfig();
-        config.packages("Controllers");
+        ResourceConfig config = new ResourceConfig(); //prepare jetty servlet
+        config.packages("Controllers"); //to use the handlers in the controllers' package
         config.register(MultiPartFeature.class);
         ServletHolder servlet = new ServletHolder(new ServletContainer(config));
 
-        Server server = new Server(8081);
+        Server server = new Server(8081); //prepare jetty server to listen to port 8081
         ServletContextHandler context = new ServletContextHandler(server, "/");
         context.addServlet(servlet, "/*");
 
@@ -38,7 +38,7 @@ public class Main {//program in the rest of the selection menu and function
             server.start();
             System.out.println("Server successfully started.");
             server.join();
-        } catch (Exception e) {
+        } catch (Exception e) { //error catching if the server fails to start
             e.printStackTrace();
         }
     }
