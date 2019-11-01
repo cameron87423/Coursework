@@ -1,27 +1,41 @@
 package Controllers;
 
 import Server.Main;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+@Path("Sessions/")
 public class SessionController {
-    public static void Sselect() {//no
+    @GET
+    @Path("List")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String Sselect() {
+        System.out.println("Sessions/list");
+        JSONArray list = new JSONArray();
         try {
             PreparedStatement ps = Main.db.prepareStatement("SELECT StudentID,TutorID,Review,Hours,Pay,Grade FROM Sessions");
             ResultSet results = ps.executeQuery();
             while (results.next()) {
-                int StudentID = results.getInt(1);
-                int TutorID = results.getInt(2);
-                double Review = results.getDouble(3);
-                int Hours = results.getInt(4);
-                double Pay = results.getDouble(5);
-                String Grade = results.getString(6);
-                System.out.println(StudentID + " "+ TutorID + " " + Review + " " + Hours + " " + Pay + " " + Grade);
-
+                JSONObject item = new JSONObject();
+                item.put("StudentID",results.getInt(1));
+                item.put("TutorID",results.getInt(2));
+                item.put("Review",results.getDouble(3));
+                item.put("Hours",results.getInt(4));
+                item.put("Pay",results.getDouble(5));
+                item.put("Grade",results.getString(6));
+                list.add(item);
             }
+            return list.toString();
         } catch (Exception e) {
-            System.out.println("Database error: " + e.getMessage() + " Please contact help@StuTu.com for more information");
+            System.out.println("Database error: " + e.getMessage());
+            return "{\"error\": \"Unable to list items, please see server console for more info.\"}";
         }
     }
 

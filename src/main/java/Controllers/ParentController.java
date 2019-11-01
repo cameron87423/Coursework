@@ -1,28 +1,43 @@
 package Controllers;
 
 import Server.Main;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+@Path("Parents/")
 public class ParentController {
-    public static void PASInfo() {//shows the info of both the parent and the student
+    @GET
+    @Path("List")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String PASInfo() {//shows the info of both the parent and the student
+        System.out.println("Parents/list");
+        JSONArray list = new JSONArray();
         try {
             PreparedStatement ps = Main.db.prepareStatement("SELECT Students.FName, Students.Age, Students.Address1,Students.Address2, Parents.PFName, Parents.PSName," +
                                                   " Parents.StudentID FROM Students JOIN Parents ON Students.StudentID = Parents.ParentID");//SQL to join the two tables and select
             ResultSet results = ps.executeQuery();
             while (results.next()) {
-                String FName = results.getString(1);
-                int Age = results.getInt(2);
-                String Address1 = results.getString(3);
-                String Address2 = results.getString(4);
-                String PFName = results.getString(5);
-                String PSName = results.getString(6);
-                System.out.println(FName + " " + Age + " " + Address1 + " " + Address2 + " "+ PFName + " "+ PSName);//prints out each of the responses
-
+                JSONObject item = new JSONObject();
+                item.put("StudentName",results.getString(1));
+                item.put("Age",results.getInt(2));
+                item.put("Address1",results.getString(3));
+                item.put("Address2",results.getString(4));
+                item.put("Name",results.getString(5));
+                item.put("Surname",results.getString(6));
+                item.put("StudentID",results.getInt(7));
+                list.add(item);
             }
+            return list.toString();
         } catch (Exception e) {
-            System.out.println("Database error: " + e.getMessage() + " Please contact help@StuTu.com for more information");
+            System.out.println("Database error: " + e.getMessage());
+            return "{\"error\": \"Unable to list items, please see server console for more info.\"}";
         }
     }
 

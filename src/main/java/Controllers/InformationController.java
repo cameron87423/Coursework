@@ -1,27 +1,41 @@
 package Controllers;
 
 import Server.Main;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+@Path("Information/")
 public class InformationController {
-    public static void Iselect() {   //test
+    @GET
+    @Path("List")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String Iselect() {
+        System.out.println("Information/list");
+        JSONArray list = new JSONArray();
         try {
             PreparedStatement ps = Main.db.prepareStatement("SELECT THours,TPay,RPay,TGrade,StudentID,TutorID FROM Information");
             ResultSet results = ps.executeQuery();
             while (results.next()) {
-                double THours = results.getDouble(1);
-                double TPay = results.getDouble(2);
-                double RPay = results.getDouble(3);
-                String TGrade = results.getString(4);
-                int StudentID = results.getInt(5);
-                int TutorID = results.getInt(6);
-                System.out.println(THours + " "+ TPay + " " + RPay + " " + TGrade + " " + StudentID + " " + TutorID);
-
+                JSONObject item = new JSONObject();
+                item.put("Hours",results.getInt(1));
+                item.put("Pay",results.getDouble(2));
+                item.put("Remaining Pay",results.getDouble(3));
+                item.put("Grade",results.getString(4));
+                item.put("StudentID",results.getInt(5));
+                item.put("TutorID",results.getInt(6));
+                list.add(item);
             }
+            return list.toString();
         } catch (Exception e) {
-            System.out.println("Database error: " + e.getMessage() + " Please contact help@StuTu.com for more information");
+            System.out.println("Database error: " + e.getMessage());
+            return "{\"error\": \"Unable to list items, please see server console for more info.\"}";
         }
     }
 

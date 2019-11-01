@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.sql.PreparedStatement;
@@ -39,22 +40,31 @@ public class StudentController {
         }
     }
 
-    public static void pick(int StudentID) {
-        try {
-            PreparedStatement ps = Main.db.prepareStatement("SELECT StudentID,FName,SName,Age,Address1,Address2 FROM Students WHERE StudentID = ?");
-            ps.setInt(1,StudentID);
-            ResultSet results = ps.executeQuery();
-            while (results.next()) {
-                String FName = results.getString(2);
-                String SName = results.getString(3);
-                int Age = results.getInt(4);
-                String Address1 = results.getString(5);
-                String Address2 = results.getString(6);
-                System.out.println(FName + " " + SName + " " + Age + " " + Address1 + " " + Address2);
-            }
+    @GET
+    @Path("pick/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String pick(@PathParam("id") Integer id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Student's id is missing in the HTTP request's URL");
         }
-        catch (Exception e){
-            System.out.println("Database error: " + e.getMessage() + " Please contact help@StuTu.com for more information");
+        System.out.println("Students/pick/" + id);
+        JSONObject item = new JSONObject();
+        try {
+            PreparedStatement ps = Main.db.prepareStatement("SELECT FName,SName,Age,Address1,Address2 FROM Students WHERE StudentID = ?");
+            ps.setInt(1,id);
+            ResultSet results = ps.executeQuery();
+            if (results.next()) {
+                item.put("StudentID", id);
+                item.put("Name", results.getString(1));
+                item.put("Surname", results.getString(2));
+                item.put("Age", results.getInt(3));
+                item.put("Address1", results.getString(4));
+                item.put("Address2", results.getString(5));
+            }
+            return item.toString();
+        }catch (Exception e){
+            System.out.println("Database error: " + e.getMessage());
+            return "{\"error\": \"Unable to list items, please see server console for more info.\"}";
         }
     }
 
