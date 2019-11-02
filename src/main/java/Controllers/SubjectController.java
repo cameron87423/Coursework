@@ -1,12 +1,11 @@
 package Controllers;
 
 import Server.Main;
+import com.sun.jersey.multipart.FormDataParam;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,19 +13,19 @@ import java.sql.ResultSet;
 @Path("Subjects/")
 public class SubjectController {
     @GET
-    @Path("List")
+    @Path("StudentSubjects/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String Subselect() {
-        System.out.println("Subjects/list");
+    public String StudentSubjects(@PathParam("id") Integer id) {
+        System.out.println("Subjects/StudentSubjects/" + id);
         JSONArray list = new JSONArray();
         try {
-            PreparedStatement ps = Main.db.prepareStatement("SELECT SubjectN,StudentID,TutorID FROM Subject");
+            PreparedStatement ps = Main.db.prepareStatement("SELECT SubjectN,TutorID FROM Subject WHERE StudentID = ?");
             ResultSet results = ps.executeQuery();
             while (results.next()) {
                 JSONObject item = new JSONObject();
+                item.put("StudentID",id);
                 item.put("SubjectName",results.getString(1));
-                item.put("StudentID",results.getInt(2));
-                item.put("TutorID",results.getInt(3));
+                item.put("TutorID",results.getInt(2));
                 list.add(item);
             }
             return list.toString();
@@ -35,37 +34,117 @@ public class SubjectController {
             return "{\"error\": \"Unable to list items, please see server console for more info.\"}";
         }
     }
-    public static void Subinsert(String SubjectN, int StudentID, int TutorID){//inserts a new record into the students
+
+    @GET
+    @Path("TutorSubjects/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String TutorSubjects(@PathParam("id") Integer id) {
+        System.out.println("Subjects/TutorSubjects/" + id);
+        JSONArray list = new JSONArray();
+        try {
+            PreparedStatement ps = Main.db.prepareStatement("SELECT SubjectN,StudentID FROM Subject WHERE TutorID = ?");
+            ResultSet results = ps.executeQuery();
+            while (results.next()) {
+                JSONObject item = new JSONObject();
+                item.put("TutorID",id);
+                item.put("SubjectName",results.getString(1));
+                item.put("StudentID",results.getInt(2));
+                list.add(item);
+            }
+            return list.toString();
+        } catch (Exception e) {
+            System.out.println("Database error: " + e.getMessage());
+            return "{\"error\": \"Unable to list items, please see server console for more info.\"}";
+        }
+    }
+
+    @GET
+    @Path("ListSubjects/{StudentID}{TutorID}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String ListSubjects(@PathParam("StudentID") Integer StudentID, @PathParam("TutorID") Integer TutorID) {
+        System.out.println("Subjects/ListSubjects/" + StudentID + " " + TutorID);
+        JSONArray list = new JSONArray();
+        try {
+            PreparedStatement ps = Main.db.prepareStatement("SELECT SubjectN, FROM Subject WHERE StudentID = ?, TutorID = ?");
+            ResultSet results = ps.executeQuery();
+            while (results.next()) {
+                JSONObject item = new JSONObject();
+                item.put("StudentID",StudentID);
+                item.put("TutorID",TutorID);
+                item.put("SubjectName",results.getString(1));
+                list.add(item);
+            }
+            return list.toString();
+        } catch (Exception e) {
+            System.out.println("Database error: " + e.getMessage());
+            return "{\"error\": \"Unable to list items, please see server console for more info.\"}";
+        }
+    }
+
+    @Path("new")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String Sinsert(@FormDataParam("subjectname") String subjectname, @FormDataParam("studentID") Integer studentID,
+                         @FormDataParam("tutorID") Integer tutorID){
         try{
+            if (subjectname == null || tutorID == null || studentID == null){
+                throw new IllegalArgumentException("One or more form data parameters are missing in the HTTP request.");
+            }
+            System.out.println("subjects/new");
             PreparedStatement ps = Main.db.prepareStatement("INSERT INTO Subject(SubjectN,StudentID,TutorID) VALUES(?,?,?)");
             //SQL for inserting a new record into a table
-            ps.setString(1, SubjectN);
-            ps.setInt(2, StudentID);
-            ps.setInt(3,TutorID);
-            ps.executeUpdate();
-        }catch (Exception e){//throws an error message if the program has an error throughout
-            System.out.println("Database error: " + e.getMessage() + " Please contact help@StuTu.com for more information");
+            ps.setString(1,subjectname);
+            ps.setInt(2,studentID);
+            ps.setInt(3,tutorID);
+            ps.execute();
+            return "{\"status\": \"OK\"}";
+        }catch (Exception e) {
+            System.out.println("Database error: " + e.getMessage());
+            return "{\"error\": \"Unable to insert items, please see server console for more info.\"}";
         }
     }
-    public static void Subupdate(String SubjectN, int StudentID, int TutorID,int SubjectID){
-        try {
-            PreparedStatement ps = Main.db.prepareStatement("UPDATE Subject SET SubjectN = ?,StudentID = ?,TutorID = ? WHERE SubjectID = ?");
-            ps.setString(1, SubjectN);
-            ps.setInt(2, StudentID);
-            ps.setInt(3, TutorID);
-            ps.setInt(4, SubjectID);
-            ps.executeUpdate();
-        } catch (Exception e) {
-            System.out.println("Database error: " + e.getMessage() + " Please contact help@StuTu.com for more information");
-        }
-    }
-    public static void Subdelete(int SubjectID){
+
+    @POST
+    @Path("change")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String Supdate(@FormDataParam("subjectID") Integer subjectID,@FormDataParam("studentID") Integer studentID,@FormDataParam("tutorID") Integer tutorID,
+                         @FormDataParam("subjectname") String subjectname){
         try{
-            PreparedStatement ps = Main.db.prepareStatement("DELETE FROM Subject WHERE SubjectID = ?");
-            ps.setInt(1,SubjectID);
-            ps.executeUpdate();
+            if (subjectname == null || studentID == null || tutorID == null){
+                throw new IllegalArgumentException("One or more form data parameters are missing in the HTTP request.");
+            }
+            System.out.println("subject/update");
+            PreparedStatement ps = Main.db.prepareStatement("UPDATE Subject SET SubjectN = ?,StudentID = ?,TutorID = ? WHERE SubjectID = ?");
+            ps.setString(1, subjectname);
+            ps.setInt(2, studentID);
+            ps.setInt(3, tutorID);
+            ps.setInt(4, subjectID);
+            ps.execute();
+            return "{\"status\": \"OK\"}";
         } catch (Exception e) {
-            System.out.println("Database error: " + e.getMessage() + " Please contact help@StuTu.com for more information");
+            System.out.println("Database error: " + e.getMessage());
+            return "{\"error\": \"Unable to update item, please see server console for more info.\"}";
+        }
+    }
+
+    @POST
+    @Path("delete")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String Sdelete(@FormDataParam("id") Integer id) {
+        try {
+            if (id == null) {
+                throw new IllegalArgumentException("One or more form data parameters are missing in the HTTP request.");
+            }
+            System.out.println("Subject/delete");
+            PreparedStatement ps = Main.db.prepareStatement("DELETE FROM Subject WHERE SubjectID = ?");
+            ps.setInt(1,id);
+            ps.execute();
+            return "{\"status\": \"OK\"}";
+        } catch (Exception e) {
+            System.out.println("Database error: " + e.getMessage());
+            return "{\"error\": \"Unable to delete item, please see server console for more info.\"}";
         }
     }
 }
