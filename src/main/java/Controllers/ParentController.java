@@ -55,25 +55,26 @@ public class ParentController {
         try {
             PreparedStatement ps = Main.db.prepareStatement("SELECT Students.FName, Students.Age, Students.Address1,Students.Address2, Parents.PFName, Parents.PSName " +
                     "FROM Students JOIN Parents ON Students.StudentID = Parents.StuedntID WHERE StudentID = ?");
-            ps.setInt(1,id);
+            ps.setInt(1, id);
             ResultSet results = ps.executeQuery();
             if (results.next()) {
                 item.put("StudentID", id);
-                item.put("StudentName",results.getString(1));
-                item.put("Age",results.getInt(2));
-                item.put("Address1",results.getString(3));
-                item.put("Address2",results.getString(4));
-                item.put("Name",results.getString(5));
-                item.put("Surname",results.getString(6));
+                item.put("StudentName", results.getString(1));
+                item.put("Age", results.getInt(2));
+                item.put("Address1", results.getString(3));
+                item.put("Address2", results.getString(4));
+                item.put("Name", results.getString(5));
+                item.put("Surname", results.getString(6));
             }
             return item.toString();
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Database error: " + e.getMessage());
             return "{\"error\": \"Unable to list items, please see server console for more info.\"}";
         }
 
     }
 
+    @POST
     @Path("new")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
