@@ -1,7 +1,8 @@
 package Controllers;
 
 import Server.Main;
-import com.sun.jersey.multipart.FormDataParam;
+
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -42,12 +43,12 @@ public class StudentController {
     @Path("pick/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String pick(@PathParam("id") Integer id) {
-        if (id == null) {
-            throw new IllegalArgumentException("Student's id is missing in the HTTP request's URL");
-        }
         System.out.println("Students/pick/" + id);
         JSONObject item = new JSONObject();
         try {
+            if (id == null) {
+                throw new Exception("Student's id is missing in the HTTP request's URL");
+            }
             PreparedStatement ps = Main.db.prepareStatement("SELECT FName,SName,Age,Address1,Address2 FROM Students WHERE StudentID = ?");
             ps.setInt(1,id);
             ResultSet results = ps.executeQuery();
