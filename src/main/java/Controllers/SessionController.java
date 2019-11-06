@@ -95,7 +95,7 @@ public class SessionController {
                          @FormDataParam("hours") Integer hours, @FormDataParam("pay") Double pay, @FormDataParam("grade") String grade){
         try{
             if (studentID == null || tutorID == null || review == null || hours == null || pay == null || grade == null){
-                throw new IllegalArgumentException("One or more form data parameters are missing in the HTTP request.");
+                throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("sessions/new");
             PreparedStatement ps = Main.db.prepareStatement("INSERT INTO Sessions (StudentID, TutorID, Review, Hours, Pay, Grade) VALUES(?,?,?,?,?,?)");
@@ -122,7 +122,7 @@ public class SessionController {
                            @FormDataParam("review") Double review, @FormDataParam("hours") Integer hours, @FormDataParam("pay") Double pay, @FormDataParam("grade") String grade){
         try{
             if (studentID == null || tutorID == null || review == null || hours == null || pay == null || grade == null){
-                throw new IllegalArgumentException("One or more form data parameters are missing in the HTTP request.");
+                throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("session/update");
             PreparedStatement ps = Main.db.prepareStatement("UPDATE Sessions SET StudentID = ?, TutorID = ?, Review = ?, Hours = ?, Pay = ?, Grade = ? WHERE SessionID = ?");
@@ -148,7 +148,7 @@ public class SessionController {
     public String Sedelete(@FormDataParam("id") Integer id) {
         try {
             if (id == null) {
-                throw new IllegalArgumentException("One or more form data parameters are missing in the HTTP request.");
+                throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("Session/delete");
             PreparedStatement ps = Main.db.prepareStatement("DELETE FROM Sessions WHERE SessionID = ?");

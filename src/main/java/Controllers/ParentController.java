@@ -46,13 +46,13 @@ public class ParentController {
     @GET
     @Path("pick/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String Tpick(@PathParam("id") Integer id) {
-        if (id == null) {
-            throw new IllegalArgumentException("Parent's id is missing in the HTTP request's URL");
-        }
+    public String Ppick(@PathParam("id") Integer id) {
         System.out.println("Parents/pick/" + id);
         JSONObject item = new JSONObject();
         try {
+            if (id == null) {
+                throw new Exception("Parent's id is missing in the HTTP request's URL");
+            }
             PreparedStatement ps = Main.db.prepareStatement("SELECT Students.FName, Students.Age, Students.Address1,Students.Address2, Parents.PFName, Parents.PSName " +
                     "FROM Students JOIN Parents ON Students.StudentID = Parents.StuedntID WHERE StudentID = ?");
             ps.setInt(1, id);
@@ -82,7 +82,7 @@ public class ParentController {
                          @FormDataParam("studentID") Integer studentID){
         try{
             if (name == null || surname == null || studentID == null){
-                throw new IllegalArgumentException("One or more form data parameters are missing in the HTTP request.");
+                throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("parents/new");
             PreparedStatement ps = Main.db.prepareStatement("INSERT INTO Parents (PFName, PSName, StudentID) VALUES(?,?,?)");
@@ -107,7 +107,7 @@ public class ParentController {
                          @FormDataParam("address1") String address1,@FormDataParam("address2") String address2){
         try{
             if (name == null || surname == null || studentname == null|| studentsurname == null || address1 == null || address2 == null){
-                throw new IllegalArgumentException("One or more form data parameters are missing in the HTTP request.");
+                throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("parent/update");
             PreparedStatement ps = Main.db.prepareStatement("UPDATE Parents SET PFName = ?, PSName = ?, StudentID = ? WHERE ParentID = ? " +
@@ -136,7 +136,7 @@ public class ParentController {
     public String Pdelete(@FormDataParam("id") Integer id) {
         try {
             if (id == null) {
-                throw new IllegalArgumentException("One or more form data parameters are missing in the HTTP request.");
+                throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("parents/delete");
             PreparedStatement ps = Main.db.prepareStatement("DELETE FROM Parents WHERE ParentID = ?");

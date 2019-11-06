@@ -89,7 +89,7 @@ public class SubjectController {
                          @FormDataParam("tutorID") Integer tutorID){
         try{
             if (subjectname == null || tutorID == null || studentID == null){
-                throw new IllegalArgumentException("One or more form data parameters are missing in the HTTP request.");
+                throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("subjects/new");
             PreparedStatement ps = Main.db.prepareStatement("INSERT INTO Subject(SubjectN,StudentID,TutorID) VALUES(?,?,?)");
@@ -110,14 +110,14 @@ public class SubjectController {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public String Supdate(@FormDataParam("subjectID") Integer subjectID,@FormDataParam("studentID") Integer studentID,@FormDataParam("tutorID") Integer tutorID,
-                         @FormDataParam("subjectname") String subjectname){
+                         @FormDataParam("subjectName") String subjectName){
         try{
-            if (subjectname == null || studentID == null || tutorID == null){
-                throw new IllegalArgumentException("One or more form data parameters are missing in the HTTP request.");
+            if (subjectName == null || studentID == null || tutorID == null){
+                throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("subject/update");
             PreparedStatement ps = Main.db.prepareStatement("UPDATE Subject SET SubjectN = ?,StudentID = ?,TutorID = ? WHERE SubjectID = ?");
-            ps.setString(1, subjectname);
+            ps.setString(1, subjectName);
             ps.setInt(2, studentID);
             ps.setInt(3, tutorID);
             ps.setInt(4, subjectID);
@@ -136,7 +136,7 @@ public class SubjectController {
     public String Sdelete(@FormDataParam("id") Integer id) {
         try {
             if (id == null) {
-                throw new IllegalArgumentException("One or more form data parameters are missing in the HTTP request.");
+                throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("Subject/delete");
             PreparedStatement ps = Main.db.prepareStatement("DELETE FROM Subject WHERE SubjectID = ?");

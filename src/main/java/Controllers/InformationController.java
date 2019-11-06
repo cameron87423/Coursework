@@ -98,7 +98,7 @@ public class InformationController {
                          @FormDataParam("tgrade") String tgrade, @FormDataParam("studentID") Integer studentID, @FormDataParam("tutorID") Integer tutorID){
         try{
             if (studentID == null || tutorID == null || thours == null || tpay == null || rpay == null){
-                throw new IllegalArgumentException("One or more form data parameters are missing in the HTTP request.");
+                throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("sessions/new");
             PreparedStatement ps = Main.db.prepareStatement("INSERT INTO Information(THours, TPay, RPay, TGrade, StudentID, TutorID) VALUES(?,?,?,?,?,?)");
@@ -125,7 +125,7 @@ public class InformationController {
                            @FormDataParam("rpay") Double rpay, @FormDataParam("tgrade") String tgrade, @FormDataParam("studentID") Integer studentID, @FormDataParam("tutorID") Integer tutorID){
         try{
             if (studentID == null || tutorID == null || thours == null || tpay == null || rpay == null || tgrade == null){
-                throw new IllegalArgumentException("One or more form data parameters are missing in the HTTP request.");
+                throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("information/update");
             PreparedStatement ps = Main.db.prepareStatement("UPDATE Information SET THours = ?, TPay = ?, RPay = ?, TGrade = ?, StudentID = ?, TutorID = ? WHERE InfoID = ?");
@@ -151,7 +151,7 @@ public class InformationController {
     public String Idelete(@FormDataParam("id") Integer id) {
         try {
             if (id == null) {
-                throw new IllegalArgumentException("One or more form data parameters are missing in the HTTP request.");
+                throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("Information/delete");
             PreparedStatement ps = Main.db.prepareStatement("DELETE FROM Information WHERE InfoID = ?");
