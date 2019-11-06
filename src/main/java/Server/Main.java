@@ -12,7 +12,7 @@ import org.sqlite.SQLiteConfig;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-public class Main {//program in the rest of the selection menu and function.
+public class Main {//program in the rest of the selection menu and function
 
     public static Connection db = null;// behaves as a global variable
     //this is the main method
