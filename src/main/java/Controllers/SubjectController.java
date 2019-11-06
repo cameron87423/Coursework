@@ -11,7 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 @Path("Subjects/")
-public class SubjectController {
+public class SubjectController {//.
     @GET
     @Path("StudentSubjects/{id}")
     @Produces(MediaType.APPLICATION_JSON)

@@ -11,7 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 @Path("Parents/")
-public class ParentController {
+public class ParentController {//.
     @GET
     @Path("child/{id}")
     @Produces(MediaType.APPLICATION_JSON)

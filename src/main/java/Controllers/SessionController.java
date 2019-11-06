@@ -11,7 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 @Path("Sessions/")
-public class SessionController {
+public class SessionController {//.
     @GET
     @Path("StudentSessions/{id}")
     @Produces(MediaType.APPLICATION_JSON)
