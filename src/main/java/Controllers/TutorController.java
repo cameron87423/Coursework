@@ -96,23 +96,49 @@ public class TutorController{//
     }
 
     @POST
+    @Path("Tlogin")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String login(@FormDataParam("name") String name, @FormDataParam("password") String password){
+        JSONObject item = new JSONObject();
+        try{
+            if (name == null || password == null){
+                throw new Exception("One or more form data parameters are missing in the HTTP request.");
+            }
+            System.out.println("tutors/login");
+            PreparedStatement ps = Main.db.prepareStatement("SELECT TFName, TPassword FROM Tutors WHERE TFName = ?, TPassword = ?");//SQL for inserting a new record into a table
+            ResultSet results = ps.executeQuery();
+            if (results.next()) {
+                item.put("Name",name);
+                item.put("Password",password);
+            }
+            ps.execute();
+            return "{\"status\": \"OK\"}";
+        }catch (Exception e) {
+            System.out.println("Database error: " + e.getMessage());
+            return "{\"error\": \"Unable to insert items, please see server console for more info.\"}";
+        }
+    }
+
+    @POST
     @Path("new")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String Tinsert(@FormDataParam("name") String name, @FormDataParam("surname") String surname,
+    public String Tinsert(@FormDataParam("name") String name, @FormDataParam("surname") String surname, @FormDataParam("password") String password,
                          @FormDataParam("gender") String gender, @FormDataParam("experience") Integer experience, @FormDataParam("rating") Double rating){
         try{
-            if (name == null || surname == null || gender == null || experience == null || rating == null){
+            if (name == null || surname == null || password == null || gender == null || experience == null || rating == null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("tutors/new");
-            PreparedStatement ps = Main.db.prepareStatement("INSERT INTO Tutors (TFName, TSName, Gender, Experience, Rating) VALUES(?,?,?,?,?)");
+            PreparedStatement ps = Main.db.prepareStatement("INSERT INTO Tutors (TFName, TSName, TPassword, Gender, Experience, Rating) VALUES(?,?,?,?,?,?)");
             //SQL for inserting a new record into a table
             ps.setString(1,name);
             ps.setString(2,surname);
-            ps.setString(3,gender);
-            ps.setInt(4,experience);
-            ps.setDouble(5,rating);
+            ps.setString(3,password);
+            ps.setString(4,gender);
+            ps.setInt(5,experience);
+            ps.setDouble(6,rating);
             ps.execute();
             return "{\"status\": \"OK\"}";
         }catch (Exception e) {
@@ -139,6 +165,28 @@ public class TutorController{//
             ps.setInt(4, experience);
             ps.setDouble(5, rating);
             ps.setInt(6, tutorID);
+            ps.execute();
+            return "{\"status\": \"OK\"}";
+        } catch (Exception e) {
+            System.out.println("Database error: " + e.getMessage());
+            return "{\"error\": \"Unable to update item, please see server console for more info.\"}";
+        }
+    }
+
+    @POST
+    @Path("Password")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String TupdateP(@FormDataParam("tutorID") Integer tutorID,@FormDataParam("name") String name,@FormDataParam("password") String password){
+        try{
+            if (name == null || password == null){
+                throw new Exception("One or more form data parameters are missing in the HTTP request.");
+            }
+            System.out.println("tutor/updatePassword");
+            PreparedStatement ps = Main.db.prepareStatement("UPDATE Tutors SET TFName = ?, TPassword = ? WHERE TutorID = ?");
+            ps.setString(1, name);
+            ps.setString(2, password);
+            ps.setInt(3,tutorID);
             ps.execute();
             return "{\"status\": \"OK\"}";
         } catch (Exception e) {

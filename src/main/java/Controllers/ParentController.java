@@ -75,21 +75,47 @@ public class ParentController {//
     }
 
     @POST
+    @Path("Plogin")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String Plogin(@FormDataParam("name") String name, @FormDataParam("password") String password){
+        JSONObject item = new JSONObject();
+        try{
+            if (name == null || password == null){
+                throw new Exception("One or more form data parameters are missing in the HTTP request.");
+            }
+            System.out.println("parents/login");
+            PreparedStatement ps = Main.db.prepareStatement("SELECT PFName, PPassword FROM Parents WHERE PFName = ?, PPassword = ?");//SQL for inserting a new record into a table
+            ResultSet results = ps.executeQuery();
+            if (results.next()) {
+                item.put("Name",name);
+                item.put("Password",password);
+            }
+            ps.execute();
+            return "{\"status\": \"OK\"}";
+        }catch (Exception e) {
+            System.out.println("Database error: " + e.getMessage());
+            return "{\"error\": \"Unable to insert items, please see server console for more info.\"}";
+        }
+    }
+
+    @POST
     @Path("new")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public String Pinsert(@FormDataParam("name") String name, @FormDataParam("surname") String surname,
-                         @FormDataParam("studentID") Integer studentID){
+            @FormDataParam("password") String password,@FormDataParam("studentID") Integer studentID){
         try{
-            if (name == null || surname == null || studentID == null){
+            if (name == null || surname == null || password == null || studentID == null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("parents/new");
-            PreparedStatement ps = Main.db.prepareStatement("INSERT INTO Parents (PFName, PSName, StudentID) VALUES(?,?,?)");
+            PreparedStatement ps = Main.db.prepareStatement("INSERT INTO Parents (PFName, PSName, PPassword, StudentID) VALUES(?,?,?,?)");
             //SQL for inserting a new record into a table
             ps.setString(1,name);
             ps.setString(2,surname);
-            ps.setInt(3,studentID);
+            ps.setString(3,password);
+            ps.setInt(4,studentID);
             ps.execute();
             return "{\"status\": \"OK\"}";
         }catch (Exception e) {
@@ -121,6 +147,28 @@ public class ParentController {//
             ps.setString(7,address1);
             ps.setString(8,address2);
             ps.setInt(9,studentID);
+            ps.execute();
+            return "{\"status\": \"OK\"}";
+        } catch (Exception e) {
+            System.out.println("Database error: " + e.getMessage());
+            return "{\"error\": \"Unable to update item, please see server console for more info.\"}";
+        }
+    }
+
+    @POST
+    @Path("Password")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String PupdateP(@FormDataParam("parentID") Integer parentID,@FormDataParam("name") String name,@FormDataParam("password") String password){
+        try{
+            if (name == null || password == null){
+                throw new Exception("One or more form data parameters are missing in the HTTP request.");
+            }
+            System.out.println("parent/updatePassword");
+            PreparedStatement ps = Main.db.prepareStatement("UPDATE Parents SET PFName = ?, TPassword = ? WHERE ParentID = ?");
+            ps.setString(1, name);
+            ps.setString(2, password);
+            ps.setInt(3,parentID);
             ps.execute();
             return "{\"status\": \"OK\"}";
         } catch (Exception e) {
