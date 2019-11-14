@@ -165,9 +165,9 @@ public class ParentController {//
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("parent/updatePassword");
-            PreparedStatement ps = Main.db.prepareStatement("UPDATE Parents SET PFName = ?, TPassword = ? WHERE ParentID = ?");
-            ps.setString(1, name);
-            ps.setString(2, password);
+            PreparedStatement ps = Main.db.prepareStatement("UPDATE Parents SET TPassword = ? WHERE PFName = ?, ParentID = ?");
+            ps.setString(1, password);
+            ps.setString(2, name);
             ps.setInt(3,parentID);
             ps.execute();
             return "{\"status\": \"OK\"}";

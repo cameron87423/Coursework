@@ -183,9 +183,9 @@ public class TutorController{//
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("tutor/updatePassword");
-            PreparedStatement ps = Main.db.prepareStatement("UPDATE Tutors SET TFName = ?, TPassword = ? WHERE TutorID = ?");
-            ps.setString(1, name);
-            ps.setString(2, password);
+            PreparedStatement ps = Main.db.prepareStatement("UPDATE Tutors SET TPassword = ? WHERE TFName = ?,TutorID = ?");
+            ps.setString(1, password);
+            ps.setString(2, name);
             ps.setInt(3,tutorID);
             ps.execute();
             return "{\"status\": \"OK\"}";

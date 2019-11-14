@@ -188,9 +188,9 @@ public class StudentController {//
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("student/updatePassword");
-            PreparedStatement ps = Main.db.prepareStatement("UPDATE Students SET FName = ?, Password = ? WHERE StudentID = ?");
-            ps.setString(1, name);
-            ps.setString(2, password);
+            PreparedStatement ps = Main.db.prepareStatement("UPDATE Students SET Password = ? WHERE FName = ?,StudentID = ?");
+            ps.setString(1, password);
+            ps.setString(2, name);
             ps.setInt(3,studentID);
             ps.execute();
             return "{\"status\": \"OK\"}";
