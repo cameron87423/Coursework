@@ -10,6 +10,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.UUID;
 
 @Path("Students/")
 public class StudentController {//
@@ -98,30 +99,37 @@ public class StudentController {//
         }
     }
 
+
     @POST
     @Path("login")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String login(@FormDataParam("name") String name, @FormDataParam("password") String password){
-        JSONObject item = new JSONObject();
-        try{
-            if (name == null || password == null){
-                throw new Exception("One or more form data parameters are missing in the HTTP request.");
+    public String loginUser(@FormDataParam("name") String name, @FormDataParam("password") String password) {
+        try {
+            PreparedStatement ps1 = Main.db.prepareStatement("SELECT Password FROM Students WHERE FName = ?");
+            ps1.setString(1, name);
+            ResultSet loginResults = ps1.executeQuery();
+            if (loginResults.next()) {
+                String correctPassword = loginResults.getString(1);
+                if (password.equals(correctPassword)) {
+                    String token = UUID.randomUUID().toString();
+                    PreparedStatement ps2 = Main.db.prepareStatement("UPDATE Students SET Token = ? WHERE FName = ?");
+                    ps2.setString(1, token);
+                    ps2.setString(2, name);
+                    ps2.executeUpdate();
+                    return "{\"token\": \""+ token + "\"}";
+                } else {
+                    return "{\"error\": \"Incorrect password!\"}";
+                }
+            } else {
+                return "{\"error\": \"Unknown user!\"}";
             }
-            System.out.println("students/login");
-            PreparedStatement ps = Main.db.prepareStatement("SELECT FName,Password FROM Students WHERE FName = ?, Password = ?");//SQL for inserting a new record into a table
-            ResultSet results = ps.executeQuery();
-            if (results.next()) {
-                item.put("Name",name);
-                item.put("Password",password);
-            }
-            ps.execute();
-            return "{\"status\": \"OK\"}";
-        }catch (Exception e) {
-            System.out.println("Database error: " + e.getMessage());
-            return "{\"error\": \"Unable to insert items, please see server console for more info.\"}";
+        }catch (Exception exception){
+            System.out.println("Database error during /user/login: " + exception.getMessage());
+            return "{\"error\": \"Server side error!\"}";
         }
     }
+
 
     @POST
     @Path("new")
