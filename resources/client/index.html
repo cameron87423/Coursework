@@ -6,10 +6,13 @@
     <script src="/client/js/index.js"></script>
 </head>
 <body onload="pageLoad()">
-<div id="testDiv"></div>
+<div id="pageHeader">
+    <p style="float: left;"id="testDiv"></p>
+    <h1 style="text-align: center">Welcome to StuTuTa</h1>
+</div>
 
 <div id ="LoginBox"  style="background: purple">
-    <div style="text-align: center">
+    <div style="align: center">
         <h2>login</h2>
     </div>
     <form id="login details">
@@ -19,7 +22,7 @@
         </div>
         <div>
             Password:<br>
-            <input type="text" name="password">
+            <input type="password" id="myInput">
             <input type="submit">
         </div>
     </form>
