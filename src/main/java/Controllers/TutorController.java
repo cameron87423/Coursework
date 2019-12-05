@@ -220,4 +220,15 @@ public class TutorController{//
             return "{\"error\": \"Unable to delete item, please see server console for more info.\"}";
         }
     }
+    public static boolean validToken(String token) {
+        try {
+            PreparedStatement ps = Main.db.prepareStatement("SELECT TutorID FROM Tutors WHERE Token = ?");
+            ps.setString(1, token);
+            ResultSet logoutResults = ps.executeQuery();
+            return logoutResults.next();
+        } catch (Exception exception) {
+            System.out.println("Database error during /Tutors/logout: " + exception.getMessage());
+            return false;
+        }
+    }
 }

@@ -106,6 +106,31 @@ public class ParentController {//
     }
 
     @POST
+    @Path("Plogout")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String logoutUser(@CookieParam("token") String token) {
+        try {
+            System.out.println("user/logout");
+            PreparedStatement ps1 = Main.db.prepareStatement("SELECT ParentID FROM Parents WHERE Token = ?");
+            ps1.setString(1, token);
+            ResultSet logoutResults = ps1.executeQuery();
+            if (logoutResults.next()) {
+                int id = logoutResults.getInt(1);
+                PreparedStatement ps2 = Main.db.prepareStatement("UPDATE Parents SET Token = NULL WHERE ParentID = ?");
+                ps2.setInt(1, id);
+                ps2.executeUpdate();
+                return "{\"status\": \"OK\"}";
+            } else {
+                return "{\"error\": \"Invalid token!\"}";
+            }
+        } catch (Exception exception){
+            System.out.println("Database error during /Parents/logout: " + exception.getMessage());
+            return "{\"error\": \"Server side error!\"}";
+        }
+    }
+
+    @POST
     @Path("new")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
@@ -171,7 +196,7 @@ public class ParentController {//
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("parent/updatePassword");
-            PreparedStatement ps = Main.db.prepareStatement("UPDATE Parents SET TPassword = ? WHERE PFName = ?, ParentID = ?");
+            PreparedStatement ps = Main.db.prepareStatement("UPDATE Parents SET PPassword = ? WHERE PFName = ?, ParentID = ?");
             ps.setString(1, password);
             ps.setString(2, name);
             ps.setInt(3,parentID);
@@ -200,6 +225,17 @@ public class ParentController {//
         } catch (Exception e) {
             System.out.println("Database error: " + e.getMessage());
             return "{\"error\": \"Unable to delete item, please see server console for more info.\"}";
+        }
+    }
+    public static boolean validToken(String token) {
+        try {
+            PreparedStatement ps = Main.db.prepareStatement("SELECT ParentID FROM Parents WHERE Token = ?");
+            ps.setString(1, token);
+            ResultSet logoutResults = ps.executeQuery();
+            return logoutResults.next();
+        } catch (Exception exception) {
+            System.out.println("Database error during /Parents/logout: " + exception.getMessage());
+            return false;
         }
     }
 }
