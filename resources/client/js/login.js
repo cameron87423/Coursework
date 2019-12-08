@@ -2,12 +2,7 @@ function pageLoad() {
     let myHTML = '<div style="align:left;"/>'
         +'<img src="/client/img/logo.jfif"  alt="Logo"/>'
     document.getElementById("testDiv").innerHTML = myHTML;
-    if(window.location.search === '?logout') {
-        document.getElementById('content').innerHTML = '<h1>Logging out, please wait...</h1>';
-        logout();
-    } else {
-        document.getElementById("loginButton").addEventListener("click", login);
-    }
+    document.getElementById("loginButton").addEventListener("click", login);
 }
 
 function login(event) {

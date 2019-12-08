@@ -11,7 +11,7 @@ import org.sqlite.SQLiteConfig;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-
+//http://localhost:8081/client/login.html how to open the website
 public class Main {//program in the rest of the selection menu and function
 
     public static Connection db = null;// behaves as a global variable
