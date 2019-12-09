@@ -104,22 +104,22 @@ public class StudentController {//
     @Path("login")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String loginUser(@FormDataParam("name") String name, @FormDataParam("password") String password) {
+    public String loginUser(@FormDataParam("id") int id, @FormDataParam("password") String password) {
         try {
-            PreparedStatement ps1 = Main.db.prepareStatement("SELECT Password FROM Students WHERE FName = ?");
-            ps1.setString(1, name);
+            PreparedStatement ps1 = Main.db.prepareStatement("SELECT Password FROM Students WHERE StudentID = ?");
+            ps1.setInt(1, id);
             ResultSet loginResults = ps1.executeQuery();
             if (loginResults.next()) {
                 String correctPassword = loginResults.getString(1);
                 if (password.equals(correctPassword)) {
                     String token = UUID.randomUUID().toString();
-                    PreparedStatement ps2 = Main.db.prepareStatement("UPDATE Students SET Token = ? WHERE FName = ?");
+                    PreparedStatement ps2 = Main.db.prepareStatement("UPDATE Students SET Token = ? WHERE StudentID = ?");
                     ps2.setString(1, token);
-                    ps2.setString(2, name);
+                    ps2.setInt(2, id);
                     ps2.executeUpdate();
                     return "{\"token\": \""+ token + "\"}";
                 } else {
-                    return "{\"error\": \"Incorrect username and password!\"}";
+                    return "{\"error\": \"Incorrect ID and password!\"}";
                 }
             } else {
                 return "{\"error\": \"Unknown user!\"}";
@@ -136,7 +136,7 @@ public class StudentController {//
     @Produces(MediaType.APPLICATION_JSON)
     public String logoutUser(@CookieParam("token") String token) {
         try {
-            System.out.println("user/logout");
+            System.out.println("student/logout");
             PreparedStatement ps1 = Main.db.prepareStatement("SELECT StudentID FROM Students WHERE Token = ?");
             ps1.setString(1, token);
             ResultSet logoutResults = ps1.executeQuery();

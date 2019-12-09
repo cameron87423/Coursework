@@ -1,9 +1,6 @@
 package Controllers;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,8 +36,12 @@ public class Client {
     @GET
     @Path("{path}")
     @Produces({"text/html"})
-    public byte[] getIHTMLFile(@PathParam("path") String path) {
-        return getFile("client/" + path);
+    public byte[] getIHTMLFile(@PathParam("path") String path, @CookieParam("token") String token) {
+        if(StudentController.validToken(token)||TutorController.validToken(token)||ParentController.validToken(token)){
+            return getFile("client/" + path);
+        } else{
+            return getFile("client/login.html");
+        }
     }
 
     @GET

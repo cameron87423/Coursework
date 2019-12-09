@@ -79,18 +79,18 @@ public class ParentController {//
     @Path("Plogin")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String loginUser(@FormDataParam("name") String name, @FormDataParam("password") String password) {
+    public String loginUser(@FormDataParam("id") int id, @FormDataParam("password") String password) {
         try {
-            PreparedStatement ps1 = Main.db.prepareStatement("SELECT Password FROM Parents WHERE PFName = ?");
-            ps1.setString(1, name);
+            PreparedStatement ps1 = Main.db.prepareStatement("SELECT Password FROM Parents WHERE ParentID = ?");
+            ps1.setInt(1, id);
             ResultSet loginResults = ps1.executeQuery();
             if (loginResults.next()) {
                 String correctPassword = loginResults.getString(1);
                 if (password.equals(correctPassword)) {
                     String token = UUID.randomUUID().toString();
-                    PreparedStatement ps2 = Main.db.prepareStatement("UPDATE Parents SET Token = ? WHERE PFName = ?");
+                    PreparedStatement ps2 = Main.db.prepareStatement("UPDATE Parents SET Token = ? WHERE ParentID = ?");
                     ps2.setString(1, token);
-                    ps2.setString(2, name);
+                    ps2.setInt(2, id);
                     ps2.executeUpdate();
                     return "{\"token\": \""+ token + "\"}";
                 } else {
@@ -111,7 +111,7 @@ public class ParentController {//
     @Produces(MediaType.APPLICATION_JSON)
     public String logoutUser(@CookieParam("token") String token) {
         try {
-            System.out.println("user/logout");
+            System.out.println("Parents/logout");
             PreparedStatement ps1 = Main.db.prepareStatement("SELECT ParentID FROM Parents WHERE Token = ?");
             ps1.setString(1, token);
             ResultSet logoutResults = ps1.executeQuery();

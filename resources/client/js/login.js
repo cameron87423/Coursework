@@ -1,12 +1,13 @@
 function pageLoad() {
-    let myHTML = '<div style="align:left;"/>'
+    let myHTML = '<div/>'
         +'<img src="/client/img/logo.jfif"  alt="Logo"/>'
-    document.getElementById("testDiv").innerHTML = myHTML;
+    document.getElementById("imageDiv").innerHTML = myHTML;
     document.getElementById("loginButton").addEventListener("click", login);
 }
 
 function login(event) {
     event.preventDefault();
+    debugger;
     const form = document.getElementById("loginForm");
     const formData = new FormData(form);
     if (document.getElementsByName("user").value = "student") {
@@ -16,31 +17,31 @@ function login(event) {
             if (responseData.hasOwnProperty('error')) {
                 alert(responseData.error);
             } else {
-                Cookies.set("username", responseData.FName);
+                Cookies.set("id", responseData.id);
                 Cookies.set("token", responseData.token);
                 window.location.href = '/client/student.html';
             }
         });
     }else if (document.getElementsByName("user").value = "tutor") {
-        fetch("/Tutors/login", {method: 'post', body: formData}
+        fetch("/Tutors/Tlogin", {method: 'post', body: formData}
         ).then(response => response.json()
         ).then(responseData => {
             if (responseData.hasOwnProperty('error')) {
                 alert(responseData.error);
             } else {
-                Cookies.set("username", responseData.TFName);
+                Cookies.set("id", responseData.id);
                 Cookies.set("token", responseData.token);
                 window.location.href = '/client/tutor.html';
             }
         });
     }else if (document.getElementsByName("user").value = "parent") {
-        fetch("/Parents/login", {method: 'post', body: formData}
+        fetch("/Parents/Plogin", {method: 'post', body: formData}
         ).then(response => response.json()
         ).then(responseData => {
             if (responseData.hasOwnProperty('error')) {
                 alert(responseData.error);
             } else {
-                Cookies.set("username", responseData.PFName);
+                Cookies.set("username", responseData.id);
                 Cookies.set("token", responseData.token);
                 window.location.href = '/client/parent.html';
             }
@@ -55,7 +56,7 @@ function logout() {
         if (responseData.hasOwnProperty('error')) {
             alert(responseData.error);
         } else {
-            Cookies.remove("FName");
+            Cookies.remove("id");
             Cookies.remove("token");
             window.location.href = '/client/login.html';
         }
@@ -68,7 +69,7 @@ function Plogout() {
         if (responseData.hasOwnProperty('error')) {
             alert(responseData.error);
         } else {
-            Cookies.remove("PFName");
+            Cookies.remove("id");
             Cookies.remove("token");
             window.location.href = '/client/login.html';
         }
@@ -81,9 +82,21 @@ function Tlogout() {
         if (responseData.hasOwnProperty('error')) {
             alert(responseData.error);
         } else {
-            Cookies.remove("TFName");
+            Cookies.remove("id");
             Cookies.remove("token");
             window.location.href = '/client/login.html';
         }
     });
 }
+function checkLogin() {
+    let id = Cookies.get("id");
+    let logInHTML = '';
+    if (id === undefined) {
+        logInHTML = "Not logged in. <a href='/client/login.html'>Log in</a>";
+    } else {
+        logInHTML = "Logged in as user ID:" + id + ". <a href='/client/login.html?logout'>Log out</a>";
+    }
+    document.getElementById("loggedInDetails").innerHTML = logInHTML;
+}
+
+

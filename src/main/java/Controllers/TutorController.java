@@ -100,18 +100,18 @@ public class TutorController{//
     @Path("Tlogin")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String loginUser(@FormDataParam("name") String name, @FormDataParam("password") String password) {
+    public String loginUser(@FormDataParam("id") int id, @FormDataParam("password") String password) {
         try {
-            PreparedStatement ps1 = Main.db.prepareStatement("SELECT Password FROM Tutors WHERE TFName = ?");
-            ps1.setString(1, name);
+            PreparedStatement ps1 = Main.db.prepareStatement("SELECT Password FROM Tutors WHERE TutorID = ?");
+            ps1.setInt(1, id);
             ResultSet loginResults = ps1.executeQuery();
             if (loginResults.next()) {
                 String correctPassword = loginResults.getString(1);
                 if (password.equals(correctPassword)) {
                     String token = UUID.randomUUID().toString();
-                    PreparedStatement ps2 = Main.db.prepareStatement("UPDATE Tutors SET Token = ? WHERE TFName = ?");
+                    PreparedStatement ps2 = Main.db.prepareStatement("UPDATE Tutors SET Token = ? WHERE TutorID = ?");
                     ps2.setString(1, token);
-                    ps2.setString(2, name);
+                    ps2.setInt(2, id);
                     ps2.executeUpdate();
                     return "{\"token\": \""+ token + "\"}";
                 } else {
@@ -122,6 +122,31 @@ public class TutorController{//
             }
         }catch (Exception exception){
             System.out.println("Database error during /user/login: " + exception.getMessage());
+            return "{\"error\": \"Server side error!\"}";
+        }
+    }
+
+    @POST
+    @Path("logout")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String logoutUser(@CookieParam("token") String token) {
+        try {
+            System.out.println("Tutors/logout");
+            PreparedStatement ps1 = Main.db.prepareStatement("SELECT TutorID FROM Tutors WHERE Token = ?");
+            ps1.setString(1, token);
+            ResultSet logoutResults = ps1.executeQuery();
+            if (logoutResults.next()) {
+                int id = logoutResults.getInt(1);
+                PreparedStatement ps2 = Main.db.prepareStatement("UPDATE Tutors SET Token = NULL WHERE TutorID = ?");
+                ps2.setInt(1, id);
+                ps2.executeUpdate();
+                return "{\"status\": \"OK\"}";
+            } else {
+                return "{\"error\": \"Invalid token!\"}";
+            }
+        } catch (Exception exception){
+            System.out.println("Database error during /Tutors/logout: " + exception.getMessage());
             return "{\"error\": \"Server side error!\"}";
         }
     }
