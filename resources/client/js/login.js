@@ -11,12 +11,14 @@ function login(event) {
     const form = document.getElementById("loginForm");
     const formData = new FormData(form);
     if (document.getElementsByName("user").value = "student") {
+        debugger;
         fetch("/Students/login", {method: 'post', body: formData}
         ).then(response => response.json()
         ).then(responseData => {
             if (responseData.hasOwnProperty('error')) {
                 alert(responseData.error);
             } else {
+                debugger;
                 Cookies.set("id", responseData.id);
                 Cookies.set("token", responseData.token);
                 window.location.href = '/client/student.html';

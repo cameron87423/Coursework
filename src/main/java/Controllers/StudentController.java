@@ -117,7 +117,10 @@ public class StudentController {//
                     ps2.setString(1, token);
                     ps2.setInt(2, id);
                     ps2.executeUpdate();
-                    return "{\"token\": \""+ token + "\"}";
+                    JSONObject userDetails = new JSONObject();
+                    userDetails.put("id",id);
+                    userDetails.put("token",token);
+                    return userDetails.toString();
                 } else {
                     return "{\"error\": \"Incorrect ID and password!\"}";
                 }
