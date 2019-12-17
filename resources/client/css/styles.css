@@ -1,5 +1,5 @@
 body {
-    background-color: crimson;
+    background-color: #b8121c;
     margin: 0;
     font-family: 'comic sans MS', serif;
 }
@@ -12,4 +12,22 @@ h1 {
     width: 20%;
     border: 3px solid #73AD21;
     padding: 15px;
+}
+#TutorList {
+    position: absolute;
+    margin-left: 0;
+    margin-top: 200px;
+}
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 5px;
+}
+table th {
+    background-color: black;
+    color: purple;
+}
+#imageDiv{
+    position: absolute;
+    margin-top: 0;
 }

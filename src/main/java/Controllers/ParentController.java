@@ -13,6 +13,7 @@ import java.util.UUID;
 
 @Path("Parents/")
 public class ParentController {//
+
     @GET
     @Path("child/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -24,17 +25,17 @@ public class ParentController {//
         JSONArray list = new JSONArray();
         try {
             PreparedStatement ps = Main.db.prepareStatement("SELECT Students.FName, Students.Age, Students.Address1,Students.Address2, Parents.PFName, Parents.PSName," +
-                                                  "FROM Students JOIN Parents ON Students.StudentID = Parents.StuedntID WHERE StudentID = ?");//SQL to join the two tables and select
+                    "FROM Students JOIN Parents ON Students.StudentID = Parents.StuedntID WHERE StudentID = ?");//SQL to join the two tables and select
             ResultSet results = ps.executeQuery();
             while (results.next()) {
                 JSONObject item = new JSONObject();
                 item.put("StudentID", id);
-                item.put("StudentName",results.getString(1));
-                item.put("Age",results.getInt(2));
-                item.put("Address1",results.getString(3));
-                item.put("Address2",results.getString(4));
-                item.put("Name",results.getString(5));
-                item.put("Surname",results.getString(6));
+                item.put("StudentName", results.getString(1));
+                item.put("Age", results.getInt(2));
+                item.put("Address1", results.getString(3));
+                item.put("Address2", results.getString(4));
+                item.put("Name", results.getString(5));
+                item.put("Surname", results.getString(6));
                 list.add(item);
             }
             return list.toString();
@@ -92,14 +93,14 @@ public class ParentController {//
                     ps2.setString(1, token);
                     ps2.setInt(2, id);
                     ps2.executeUpdate();
-                    return "{\"token\": \""+ token + "\"}";
+                    return "{\"token\": \"" + token + "\"}";
                 } else {
                     return "{\"error\": \"Incorrect password!\"}";
                 }
             } else {
                 return "{\"error\": \"Unknown user!\"}";
             }
-        }catch (Exception exception){
+        } catch (Exception exception) {
             System.out.println("Database error during /user/login: " + exception.getMessage());
             return "{\"error\": \"Server side error!\"}";
         }
@@ -124,7 +125,7 @@ public class ParentController {//
             } else {
                 return "{\"error\": \"Invalid token!\"}";
             }
-        } catch (Exception exception){
+        } catch (Exception exception) {
             System.out.println("Database error during /Parents/logout: " + exception.getMessage());
             return "{\"error\": \"Server side error!\"}";
         }
@@ -135,21 +136,24 @@ public class ParentController {//
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public String Pinsert(@FormDataParam("name") String name, @FormDataParam("surname") String surname,
-            @FormDataParam("password") String password,@FormDataParam("studentID") Integer studentID){
-        try{
-            if (name == null || surname == null || password == null || studentID == null){
+                          @FormDataParam("password") String password, @FormDataParam("studentID") Integer studentID, @CookieParam("token") String token) {
+        if (!ParentController.validToken(token)) {
+            return "{\"error\": \"You don't appear to be logged in.\"}";
+        }
+        try {
+            if (name == null || surname == null || password == null || studentID == null) {
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("parents/new");
             PreparedStatement ps = Main.db.prepareStatement("INSERT INTO Parents (PFName, PSName, PPassword, StudentID) VALUES(?,?,?,?)");
             //SQL for inserting a new record into a table
-            ps.setString(1,name);
-            ps.setString(2,surname);
-            ps.setString(3,password);
-            ps.setInt(4,studentID);
+            ps.setString(1, name);
+            ps.setString(2, surname);
+            ps.setString(3, password);
+            ps.setInt(4, studentID);
             ps.execute();
             return "{\"status\": \"OK\"}";
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Database error: " + e.getMessage());
             return "{\"error\": \"Unable to insert items, please see server console for more info.\"}";
         }
@@ -159,25 +163,25 @@ public class ParentController {//
     @Path("change")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String Pupdate(@FormDataParam("parentID") Integer parentID,@FormDataParam("studentID") Integer studentID,@FormDataParam("name") String name,
-                         @FormDataParam("surname") String surname,@FormDataParam("studentname") String studentname, @FormDataParam("studentsurname") String studentsurname,
-                         @FormDataParam("address1") String address1,@FormDataParam("address2") String address2){
-        try{
-            if (name == null || surname == null || studentname == null|| studentsurname == null || address1 == null || address2 == null){
+    public String Pupdate(@FormDataParam("parentID") Integer parentID, @FormDataParam("studentID") Integer studentID, @FormDataParam("name") String name,
+                          @FormDataParam("surname") String surname, @FormDataParam("address1") String address1, @FormDataParam("address2") String address2, @CookieParam("token") String token) {
+        if (!ParentController.validToken(token)) {
+            return "{\"error\": \"You don't appear to be logged in.\"}";
+        }
+        try {
+            if (name == null || surname == null || address1 == null || address2 == null) {
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("parent/update");
             PreparedStatement ps = Main.db.prepareStatement("UPDATE Parents SET PFName = ?, PSName = ?, StudentID = ? WHERE ParentID = ? " +
-                    "UPDATE Students SET FName = ?, SName = ?, Address1 = ?, Address2 = ? WHERE StudentID = ?");
+                    "UPDATE Students SET Address1 = ?, Address2 = ? WHERE StudentID = ?");
             ps.setString(1, name);
             ps.setString(2, surname);
             ps.setInt(3, studentID);
-            ps.setInt(4,parentID);
-            ps.setString(5,studentname);
-            ps.setString(6,studentsurname);
-            ps.setString(7,address1);
-            ps.setString(8,address2);
-            ps.setInt(9,studentID);
+            ps.setInt(4, parentID);
+            ps.setString(5, address1);
+            ps.setString(6, address2);
+            ps.setInt(7, studentID);
             ps.execute();
             return "{\"status\": \"OK\"}";
         } catch (Exception e) {
@@ -190,16 +194,19 @@ public class ParentController {//
     @Path("Password")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String PupdateP(@FormDataParam("parentID") Integer parentID,@FormDataParam("name") String name,@FormDataParam("password") String password){
-        try{
-            if (name == null || password == null){
+    public String PupdateP(@FormDataParam("parentID") Integer parentID, @FormDataParam("name") String name, @FormDataParam("password") String password, @CookieParam("token") String token) {
+        if (!ParentController.validToken(token)) {
+            return "{\"error\": \"You don't appear to be logged in.\"}";
+        }
+        try {
+            if (name == null || password == null) {
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("parent/updatePassword");
             PreparedStatement ps = Main.db.prepareStatement("UPDATE Parents SET PPassword = ? WHERE PFName = ?, ParentID = ?");
             ps.setString(1, password);
             ps.setString(2, name);
-            ps.setInt(3,parentID);
+            ps.setInt(3, parentID);
             ps.execute();
             return "{\"status\": \"OK\"}";
         } catch (Exception e) {
@@ -212,14 +219,17 @@ public class ParentController {//
     @Path("delete")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String Pdelete(@FormDataParam("id") Integer id) {
+    public String Pdelete(@FormDataParam("id") Integer id, @CookieParam("token") String token) {
+        if (!ParentController.validToken(token)) {
+            return "{\"error\": \"You don't appear to be logged in.\"}";
+        }
         try {
             if (id == null) {
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("parents/delete");
             PreparedStatement ps = Main.db.prepareStatement("DELETE FROM Parents WHERE ParentID = ?");
-            ps.setInt(1,id);
+            ps.setInt(1, id);
             ps.execute();
             return "{\"status\": \"OK\"}";
         } catch (Exception e) {
@@ -227,6 +237,7 @@ public class ParentController {//
             return "{\"error\": \"Unable to delete item, please see server console for more info.\"}";
         }
     }
+
     public static boolean validToken(String token) {
         try {
             PreparedStatement ps = Main.db.prepareStatement("SELECT ParentID FROM Parents WHERE Token = ?");

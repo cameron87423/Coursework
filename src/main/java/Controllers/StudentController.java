@@ -79,11 +79,11 @@ public class StudentController {//
                 throw new Exception("Student's id is missing in the HTTP request's URL");
             }
             PreparedStatement ps = Main.db.prepareStatement("SELECT Students.FName, Subject.SubjectN, Tutors.TutorID, Tutors.TFName, Tutors.TSName, Tutors.Rating FROM Students " +
-                    "JOIN Subject ON Students.StudentID = Subject.StudentID JOIN Tutors ON Subject.TutorID = Tutors.TutorID WHERE Students.StudentID = 1");//SQL to join the two tables and select
+                    "JOIN Subject ON Students.StudentID = Subject.StudentID JOIN Tutors ON Subject.TutorID = Tutors.TutorID WHERE Students.StudentID = ?");//SQL to join the two tables and select
+            ps.setInt(1,id);
             ResultSet results = ps.executeQuery();
             while (results.next()) {
                 JSONObject item = new JSONObject();
-                item.put("StudentID", id);
                 item.put("StudentName",results.getString(1));
                 item.put("SubjectName",results.getString(2));
                 item.put("TutorID",results.getInt(3));
@@ -191,7 +191,10 @@ public class StudentController {//
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public String update(@FormDataParam("studentID") Integer studentID,@FormDataParam("name") String name,@FormDataParam("surname") String surname,@FormDataParam("age") Integer age,
-                         @FormDataParam("gender") String gender,@FormDataParam("address1") String address1,@FormDataParam("address2") String address2){
+                         @FormDataParam("gender") String gender,@FormDataParam("address1") String address1,@FormDataParam("address2") String address2,@CookieParam("token") String token){
+        if (!StudentController.validToken(token)) {
+            return "{\"error\": \"You don't appear to be logged in.\"}";
+        }
         try{
             if (name == null || surname == null || age == null || gender == null || address1 == null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
@@ -217,7 +220,10 @@ public class StudentController {//
     @Path("Password")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String updateP(@FormDataParam("studentID") Integer studentID,@FormDataParam("name") String name,@FormDataParam("password") String password){
+    public String updateP(@FormDataParam("studentID") Integer studentID,@FormDataParam("name") String name,@FormDataParam("password") String password,@CookieParam("token") String token){
+        if (!StudentController.validToken(token)) {
+            return "{\"error\": \"You don't appear to be logged in.\"}";
+        }
         try{
             if (name == null || password == null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
@@ -239,7 +245,10 @@ public class StudentController {//
     @Path("delete")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String delete(@FormDataParam("id") Integer id) {
+    public String delete(@FormDataParam("id") Integer id,@CookieParam("token") String token){
+        if (!StudentController.validToken(token)) {
+            return "{\"error\": \"You don't appear to be logged in.\"}";
+        }
         try {
             if (id == null) {
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");

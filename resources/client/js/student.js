@@ -23,13 +23,12 @@ function pageLoading() {
         } else {
             for (let student of responseData) {
                 tutorsHTML += `<tr>` +
-                    `<td>${student.Fname}</td>` +
-                    `<td>${student.SubjectN}</td>` +
+                    `<td>${student.StudentName}</td>` +
+                    `<td>${student.SubjectName}</td>` +
                     `<td>${student.TutorID}</td>` +
-                    `<td>${student.TFName}</td>` +
-                    `<td>${student.TSName}</td>` +
+                    `<td>${student.TutorName}</td>` +
+                    `<td>${student.TutorSurname}</td>` +
                     `<td>${student.Rating}</td>` +
-                    `</td>` +
                     `</tr>`;
             }
         }
