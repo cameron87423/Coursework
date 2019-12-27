@@ -14,8 +14,39 @@ h1 {
     padding: 15px;
 }
 #TutorList {
+    clear: both;
+    position: absolute;
+    margin-left:0;
+    margin-top:200px;
+}
+#SubjectsList{
+    clear: both;
+    position: absolute;
+    margin-left:800px;
+    margin-top:200px;
+}
+#SessionsList{
+    clear: both;
+    position: absolute;
+    margin-left:1200px;
+    margin-top:200px;
+}
+#InformationList{
+    clear: both;
     position: absolute;
     margin-left: 0;
+    margin-top: 200px;
+}
+#InformationOne{
+    clear: both;
+    position: absolute;
+    margin-left: 550px;
+    margin-top: 200px;
+}
+#SessionOne{
+    clear: both;
+    position: absolute;
+    margin-left: 1200px;
     margin-top: 200px;
 }
 table, th, td {
@@ -30,4 +61,22 @@ table th {
 #imageDiv{
     position: absolute;
     margin-top: 0;
+}
+#ChangeInfo{
+    margin-left:600px;
+    margin-top:400px;
+}
+#ChangeSubject{
+    margin-left:600px;
+    margin-top:400px;
+}
+#InfoInput{
+    position: absolute;
+    margin-left: 300px;
+    margin-top: 160px;
+}
+#SessionInput{
+    position: absolute;
+    margin-left: 700px;
+    margin-top: 160px;
 }

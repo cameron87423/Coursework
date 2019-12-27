@@ -20,10 +20,10 @@ public class SessionController {//
         JSONArray list = new JSONArray();
         try {
             PreparedStatement ps = Main.db.prepareStatement("SELECT TutorID, Hours, Pay, Grade FROM Sessions WHERE StudentID = ?");
+            ps.setInt(1,id);
             ResultSet results = ps.executeQuery();
             while (results.next()) {
                 JSONObject item = new JSONObject();
-                item.put("StudentID",id);
                 item.put("TutorID",results.getInt(1));
                 item.put("Hours",results.getInt(2));
                 item.put("Pay",results.getDouble(3));
@@ -45,10 +45,10 @@ public class SessionController {//
         JSONArray list = new JSONArray();
         try {
             PreparedStatement ps = Main.db.prepareStatement("SELECT StudentID, Hours, Pay, Grade FROM Sessions WHERE TutorID = ?");
+            ps.setInt(1,id);
             ResultSet results = ps.executeQuery();
             while (results.next()) {
                 JSONObject item = new JSONObject();
-                item.put("TutorID",id);
                 item.put("StudentID",results.getInt(1));
                 item.put("Hours",results.getInt(2));
                 item.put("Pay",results.getDouble(3));
@@ -63,13 +63,15 @@ public class SessionController {//
     }
 
     @GET
-    @Path("ListSessions/{StudentID}{TutorID}")
+    @Path("ListSessions/{StudentID}/{TutorID}")
     @Produces(MediaType.APPLICATION_JSON)
     public String ListSessions(@PathParam("StudentID") Integer StudentID, @PathParam("TutorID") Integer TutorID) {
         System.out.println("Sessions/TutorSessions/" + StudentID + " " + TutorID);
         JSONArray list = new JSONArray();
         try {
-            PreparedStatement ps = Main.db.prepareStatement("SELECT Hours, Pay, Grade FROM Sessions WHERE TutorID = ?, StudentID = ?");
+            PreparedStatement ps = Main.db.prepareStatement("SELECT Hours, Pay, Grade FROM Sessions WHERE TutorID = ? AND StudentID = ?");
+            ps.setInt(1,TutorID);
+            ps.setInt(2,StudentID);
             ResultSet results = ps.executeQuery();
             while (results.next()) {
                 JSONObject item = new JSONObject();

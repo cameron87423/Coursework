@@ -20,10 +20,10 @@ public class InformationController {//
         JSONArray list = new JSONArray();
         try {
             PreparedStatement ps = Main.db.prepareStatement("SELECT TutorID, THours, TPay, RPay, TGrade FROM Information WHERE StudentID = ?");
+            ps.setInt(1,id);
             ResultSet results = ps.executeQuery();
             while (results.next()) {
                 JSONObject item = new JSONObject();
-                item.put("StudentID",id);
                 item.put("TutorID",results.getInt(1));
                 item.put("THours",results.getInt(2));
                 item.put("TotalPay",results.getDouble(3));
@@ -46,10 +46,10 @@ public class InformationController {//
         JSONArray list = new JSONArray();
         try {
             PreparedStatement ps = Main.db.prepareStatement("SELECT StudentID, THours, TPay, RPay, TGrade FROM Information WHERE TutorID = ?");
+            ps.setInt(1,id);
             ResultSet results = ps.executeQuery();
             while (results.next()) {
                 JSONObject item = new JSONObject();
-                item.put("TutorID",id);
                 item.put("StudentID",results.getInt(1));
                 item.put("THours",results.getInt(2));
                 item.put("TotalPay",results.getDouble(3));
@@ -65,18 +65,20 @@ public class InformationController {//
     }
 
     @GET
-    @Path("One/{StudentID}{TutorID}")
+    @Path("One/{StudentID}/{TutorID}")
     @Produces(MediaType.APPLICATION_JSON)
     public String One(@PathParam("StudentID") Integer StudentID, @PathParam("TutorID") Integer TutorID) {
         System.out.println("Information/Tutors/" + StudentID + " " + TutorID);
         JSONArray list = new JSONArray();
         try {
-            PreparedStatement ps = Main.db.prepareStatement("SELECT THours, TPay, RPay, TGrade FROM Information WHERE TutorID = ?, StudentID = ?");
+            PreparedStatement ps = Main.db.prepareStatement("SELECT THours, TPay, RPay, TGrade FROM Information WHERE TutorID = ? AND StudentID = ?");
+            ps.setInt(1,StudentID);
+            ps.setInt(2,TutorID);
             ResultSet results = ps.executeQuery();
             while (results.next()) {
                 JSONObject item = new JSONObject();
                 item.put("TutorID", TutorID);
-                item.put("Student", StudentID);
+                item.put("StudentID", StudentID);
                 item.put("THours",results.getInt(1));
                 item.put("TotalPay",results.getDouble(2));
                 item.put("RemainingPay",results.getDouble(3));

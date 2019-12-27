@@ -20,10 +20,10 @@ public class SubjectController {//
         JSONArray list = new JSONArray();
         try {
             PreparedStatement ps = Main.db.prepareStatement("SELECT SubjectN,TutorID FROM Subject WHERE StudentID = ?");
+            ps.setInt(1,id);
             ResultSet results = ps.executeQuery();
             while (results.next()) {
                 JSONObject item = new JSONObject();
-                item.put("StudentID",id);
                 item.put("SubjectName",results.getString(1));
                 item.put("TutorID",results.getInt(2));
                 list.add(item);
@@ -43,10 +43,10 @@ public class SubjectController {//
         JSONArray list = new JSONArray();
         try {
             PreparedStatement ps = Main.db.prepareStatement("SELECT SubjectN,StudentID FROM Subject WHERE TutorID = ?");
+            ps.setInt(1,id);
             ResultSet results = ps.executeQuery();
             while (results.next()) {
                 JSONObject item = new JSONObject();
-                item.put("TutorID",id);
                 item.put("SubjectName",results.getString(1));
                 item.put("StudentID",results.getInt(2));
                 list.add(item);
@@ -65,7 +65,9 @@ public class SubjectController {//
         System.out.println("Subjects/ListSubjects/" + StudentID + " " + TutorID);
         JSONArray list = new JSONArray();
         try {
-            PreparedStatement ps = Main.db.prepareStatement("SELECT SubjectN, FROM Subject WHERE StudentID = ?, TutorID = ?");
+            PreparedStatement ps = Main.db.prepareStatement("SELECT SubjectN, FROM Subject WHERE StudentID = ? AND TutorID = ?");
+            ps.setInt(1,StudentID);
+            ps.setInt(2,TutorID);
             ResultSet results = ps.executeQuery();
             while (results.next()) {
                 JSONObject item = new JSONObject();

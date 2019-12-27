@@ -51,7 +51,6 @@ public class TutorController{//
             ps.setInt(1,id);
             ResultSet results = ps.executeQuery();
             if (results.next()) {
-                item.put("TutorID", id);
                 item.put("Name", results.getString(1));
                 item.put("Surname", results.getString(2));
                 item.put("Gender", results.getString(3));
@@ -81,7 +80,6 @@ public class TutorController{//
             ResultSet results = ps.executeQuery();
             while (results.next()) {
                 JSONObject item = new JSONObject();
-                item.put("TutorID", id);
                 item.put("TutorName",results.getString(1));
                 item.put("SubjectName",results.getString(2));
                 item.put("StudentID",results.getInt(3));

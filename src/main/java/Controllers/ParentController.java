@@ -26,10 +26,10 @@ public class ParentController {//
         try {
             PreparedStatement ps = Main.db.prepareStatement("SELECT Students.FName, Students.Age, Students.Address1,Students.Address2, Parents.PFName, Parents.PSName," +
                     "FROM Students JOIN Parents ON Students.StudentID = Parents.StuedntID WHERE StudentID = ?");//SQL to join the two tables and select
+            ps.setInt(1,id);
             ResultSet results = ps.executeQuery();
             while (results.next()) {
                 JSONObject item = new JSONObject();
-                item.put("StudentID", id);
                 item.put("StudentName", results.getString(1));
                 item.put("Age", results.getInt(2));
                 item.put("Address1", results.getString(3));
@@ -60,7 +60,6 @@ public class ParentController {//
             ps.setInt(1, id);
             ResultSet results = ps.executeQuery();
             if (results.next()) {
-                item.put("StudentID", id);
                 item.put("StudentName", results.getString(1));
                 item.put("Age", results.getInt(2));
                 item.put("Address1", results.getString(3));

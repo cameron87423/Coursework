@@ -54,7 +54,6 @@ public class StudentController {//
             ps.setInt(1,id);
             ResultSet results = ps.executeQuery();
             if (results.next()) {
-                item.put("StudentID", id);
                 item.put("Name", results.getString(1));
                 item.put("Surname", results.getString(2));
                 item.put("Age", results.getInt(3));
