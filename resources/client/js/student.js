@@ -1,16 +1,23 @@
 function pageLoading() {
+    debugger;
     let name = Cookies.get("id");
     let myHTML = '<div/>'
         + '<img src="/client/img/logo.jfif"  alt="Logo"/>';
     document.getElementById("imageDiv").innerHTML = myHTML;
-    document.getElementById("heading").innerHTML = "welcome student: " + name
+    document.getElementById("heading").innerHTML ="welcome student: " + name;
 
     document.getElementById("first").style.display="block";
     document.getElementById("ChangeInfo").style.display='block';
+    document.getElementById("create1").style.display='block';
     document.getElementById("second").style.display='none';
     document.getElementById("ChangeSubject").style.display='none';
+    document.getElementById("create2").style.display='none';
+    document.getElementById("editSub").style.display='none';
     document.getElementById("ISearch").addEventListener("click", InfoO);
     document.getElementById("SSearch").addEventListener("click", SessionO);
+    document.getElementById("saveSub").addEventListener("click", saveEditSubject);
+    document.getElementById("cancelSub").addEventListener("click", cancelEditSubject);
+
     let I = document.getElementById("changeI");
     I.onclick = Info;
     let P =document.getElementById("changeS");
@@ -18,12 +25,15 @@ function pageLoading() {
 
     let tutorsHTML = `<table>` +
         '<tr>' +
+        '<th>StudentID</th>' +
         '<th>First name</th>' +
+        '<th>SubjectID</th>' +
         '<th>Subject</th>' +
         '<th>Tutor ID</th>' +
         '<th>Tutor name</th>' +
         '<th>Tutor surname</th>' +
         '<th>rating</th>' +
+        '<th class="last">Options</th>' +
         '</tr>';
     fetch('/Students/TutorList/' + Cookies.get("id"),{method: 'get'}
     ).then(response => response.json()
@@ -33,47 +43,38 @@ function pageLoading() {
         } else {
             for (let student of responseData) {
                 tutorsHTML += `<tr>` +
+                    `<td>${student.StudentID}</td>` +
                     `<td>${student.StudentName}</td>` +
+                    `<td>${student.SubjectID}</td>` +
                     `<td>${student.SubjectName}</td>` +
                     `<td>${student.TutorID}</td>` +
                     `<td>${student.TutorName}</td>` +
                     `<td>${student.TutorSurname}</td>` +
                     `<td>${student.Rating}</td>` +
+                    `<td class="last">` +
+                    `<button class='editSub' data-id='${student.StudentID}'>Edit</button>` +
+                    `<button class='deleteSub' data-id='${student.StudentID}'>Delete</button>` +
+                    `</td>` +
                     `</tr>`;
             }
         }
         tutorsHTML += '</table>';
         document.getElementById("TutorList").innerHTML = tutorsHTML;
-    });
-
-    let subjectsHTML = `<table>` +
-        '<tr>' +
-        '<th>Subject</th>' +
-        '<th>TutorID</th>' +
-        '</tr>';
-    fetch('/Subjects/StudentSubjects/' + Cookies.get("id"),{method: 'get'}
-    ).then(response => response.json()
-    ).then(sub => {
-        if (sub.hasOwnProperty('error')) {
-            alert(sub.error);
-        } else {
-            for (let student of sub) {
-                subjectsHTML += `<tr>` +
-                    `<td>${student.SubjectName}</td>` +
-                    `<td>${student.TutorID}</td>` +
-                    `</tr>`;
-            }
+        let editButtons = document.getElementsByClassName("editSub");
+        for (let button of editButtons) {
+            button.addEventListener("click", editSubject);
         }
-        subjectsHTML += '</table>';
-        document.getElementById("SubjectsList").innerHTML = subjectsHTML;
     });
 
     let sessionsHTML = `<table>` +
         '<tr>' +
+        '<th>SessionID</th>' +
+        '<th>StudentID</th>' +
         '<th>TutorID</th>' +
         '<th>Hours</th>' +
         '<th>Pay</th>' +
         '<th>Grade</th>' +
+        '<th class="last">Options</th>' +
         '</tr>';
     fetch('/Sessions/StudentSessions/' + Cookies.get("id"), {method: 'get'}
     ).then(response => response.json()
@@ -83,31 +84,43 @@ function pageLoading() {
         } else {
             for (let student of responseDa) {
                 sessionsHTML += `<tr>` +
+                    `<td>${student.SessionID}</td>` +
+                    `<td>${student.StudentID}</td>` +
                     `<td>${student.TutorID}</td>` +
                     `<td>${student.Hours}</td>` +
                     `<td>${student.Pay}</td>` +
                     `<td>${student.Grade}</td>` +
+                    `<td class="last">` +
+                    `<button class='editSes' data-id='${student.StudentID}'>Edit</button>` +
+                    `<button class='deleteSes' data-id='${student.StudentID}'>Delete</button>` +
+                    `</td>` +
                     `</tr>`;
             }
         }
         sessionsHTML += '</table>';
         document.getElementById("SessionsList").innerHTML = sessionsHTML;
+
     });
 }
 
 function Info(){
     document.getElementById("first").style.display='none';
     document.getElementById("ChangeInfo").style.display='none';
+    document.getElementById("create1").style.display='none';
     document.getElementById("second").style.display=('block');
     document.getElementById("ChangeSubject").style.display='block';
+    document.getElementById("create2").style.display='block';
 
     let infoHTML = `<table>` +
         '<tr>' +
+        '<th>Info ID</th>' +
+        '<th>Student ID</th>' +
         '<th>Tutor ID</th>' +
         '<th>Total hours</th>' +
         '<th>Total pay</th>' +
         '<th>Remaining pay</th>' +
         '<th>Target grade</th>' +
+        '<th class="last">Options</th>' +
         '</tr>';
     fetch('/Information/Students/' + Cookies.get("id"), {method: 'get'}
     ).then(response => response.json()
@@ -117,11 +130,17 @@ function Info(){
         } else {
             for (let student of responseDat) {
                 infoHTML += `<tr>` +
+                    `<td>${student.InformationID}</td>` +
+                    `<td>${student.StudentID}</td>` +
                     `<td>${student.TutorID}</td>` +
                     `<td>${student.THours}</td>` +
                     `<td>${student.TotalPay}</td>` +
                     `<td>${student.RemainingPay}</td>` +
                     `<td>${student.Grade}</td>` +
+                    `<td class="last">` +
+                    `<button class='editInfo' data-id='${student.InformationID}'>Edit</button>` +
+                    `<button class='deleteInfo' data-id='${student.InformationID}'>Delete</button>` +
+                    `</td>` +
                     `</tr>`;
             }
         }
@@ -135,6 +154,8 @@ function InfoO(event){
     debugger;
     let infoOHTML = `<table>` +
         '<tr>' +
+        '<th>InfoID</th>' +
+        '<th>StudentID</th>' +
         '<th>TutorID</th>' +
         '<th>StudentID</th>' +
         '<th>Total Hours</th>' +
@@ -151,6 +172,8 @@ function InfoO(event){
         } else {
             for (let student of responseData) {
                 infoOHTML += `<tr>` +
+                    `<td>${student.StudentID}</td>` +
+                    `<td>${student.StudentID}</td>` +
                     `<td>${student.TutorID}</td>` +
                     `<td>${student.StudentID}</td>` +
                     `<td>${student.THours}</td>` +
@@ -169,6 +192,7 @@ function SessionO(event){
     event.preventDefault();
     let sessHTML = `<table>` +
         '<tr>' +
+        '<th>StudentID</th>' +
         '<th>TutorID</th>' +
         '<th>StudentID</th>' +
         '<th>Hour(s)</th>' +
@@ -184,6 +208,7 @@ function SessionO(event){
         } else {
             for (let student of responseData) {
                 sessHTML += `<tr>` +
+                    `<td>${student.StudentID}</td>` +
                     `<td>${student.TutorID}</td>` +
                     `<td>${student.StudentID}</td>` +
                     `<td>${student.Hours}</td>` +
@@ -195,4 +220,54 @@ function SessionO(event){
         sessHTML += '</table>';
         document.getElementById("SessionOne").innerHTML = sessHTML;
     });
+}
+function editSubject(event) {
+    const id = event.target.getAttribute("data-id");
+    if (id === null) {
+        document.getElementById("editHeading").innerHTML = 'Add new subject:';
+    }else {
+        document.getElementById("editHeading").innerHTML = 'Editing subject:';
+    }
+    debugger;
+    document.getElementById("SubjectID").value = '';
+    document.getElementById("Subject").value = '';
+    document.getElementById("Student").value = '';
+    document.getElementById("Tutor").value = '';
+
+    document.getElementById("first").style.display = 'none';
+    document.getElementById("create1").style.display = 'none';
+    document.getElementById("ChangeInfo").style.display = 'none';
+    document.getElementById("editSub").style.display = 'block';
+}
+function saveEditSubject(event) {
+    debugger;
+    event.preventDefault();
+    const id = document.getElementById("SubjectID").value;
+    const form = document.getElementById("SubForm");
+    const formData = new FormData(form);
+    let apiPath = '';
+    if (id === '') {
+        apiPath = '/Subjects/new';
+    } else {
+        apiPath = '/Subjects/change';
+    }
+    fetch(apiPath, {method: 'post', body: formData}
+    ).then(response => response.json()
+    ).then(responseData => {
+        if (responseData.hasOwnProperty('error')) {
+            alert(responseData.error);
+        } else {
+            document.getElementById("first").style.display = 'block';
+            document.getElementById("create1").style.display = 'block';
+            document.getElementById("ChangeInfo").style.display = 'block';
+            document.getElementById("editSub").style.display = 'none';
+        }
+    });
+}
+function cancelEditSubject(event) {
+    event.preventDefault();
+    document.getElementById("first").style.display = 'block';
+    document.getElementById("create1").style.display = 'block';
+    document.getElementById("ChangeInfo").style.display = 'block';
+    document.getElementById("editSub").style.display = 'none';
 }

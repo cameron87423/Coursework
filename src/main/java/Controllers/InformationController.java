@@ -19,16 +19,18 @@ public class InformationController {//
         System.out.println("Information/Students/" + id);
         JSONArray list = new JSONArray();
         try {
-            PreparedStatement ps = Main.db.prepareStatement("SELECT TutorID, THours, TPay, RPay, TGrade FROM Information WHERE StudentID = ?");
+            PreparedStatement ps = Main.db.prepareStatement("SELECT InfoID,TutorID, THours, TPay, RPay, TGrade FROM Information WHERE StudentID = ?");
             ps.setInt(1,id);
             ResultSet results = ps.executeQuery();
             while (results.next()) {
                 JSONObject item = new JSONObject();
-                item.put("TutorID",results.getInt(1));
-                item.put("THours",results.getInt(2));
-                item.put("TotalPay",results.getDouble(3));
-                item.put("RemainingPay",results.getDouble(4));
-                item.put("Grade",results.getString(5));
+                item.put("StudentID",id);
+                item.put("InformationID",results.getInt(1));
+                item.put("TutorID",results.getInt(2));
+                item.put("THours",results.getInt(3));
+                item.put("TotalPay",results.getDouble(4));
+                item.put("RemainingPay",results.getDouble(5));
+                item.put("Grade",results.getString(6));
                 list.add(item);
             }
             return list.toString();
@@ -45,16 +47,18 @@ public class InformationController {//
         System.out.println("Information/Tutors/" + id);
         JSONArray list = new JSONArray();
         try {
-            PreparedStatement ps = Main.db.prepareStatement("SELECT StudentID, THours, TPay, RPay, TGrade FROM Information WHERE TutorID = ?");
+            PreparedStatement ps = Main.db.prepareStatement("SELECT InfoID,StudentID, THours, TPay, RPay, TGrade FROM Information WHERE TutorID = ?");
             ps.setInt(1,id);
             ResultSet results = ps.executeQuery();
             while (results.next()) {
                 JSONObject item = new JSONObject();
-                item.put("StudentID",results.getInt(1));
-                item.put("THours",results.getInt(2));
-                item.put("TotalPay",results.getDouble(3));
-                item.put("RemainingPay",results.getDouble(4));
-                item.put("Grade",results.getString(5));
+                item.put("TutorID",id);
+                item.put("InformationID",results.getInt(1));
+                item.put("StudentID",results.getInt(2));
+                item.put("THours",results.getInt(3));
+                item.put("TotalPay",results.getDouble(4));
+                item.put("RemainingPay",results.getDouble(5));
+                item.put("Grade",results.getString(6));
                 list.add(item);
             }
             return list.toString();

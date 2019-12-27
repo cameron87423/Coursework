@@ -7,46 +7,35 @@ h1 {
     margin-top:0;
 }
 
-#LoginBox{
+#LoginBox, #editSub{
+    background: purple;
     margin: auto;
     width: 20%;
     border: 3px solid #73AD21;
     padding: 15px;
 }
-#TutorList {
+#TutorList,#InformationList {
     clear: both;
     position: absolute;
     margin-left:0;
     margin-top:200px;
 }
-#SubjectsList{
-    clear: both;
-    position: absolute;
-    margin-left:800px;
-    margin-top:200px;
-}
 #SessionsList{
     clear: both;
     position: absolute;
-    margin-left:1200px;
+    margin-left: 1100px;
     margin-top:200px;
-}
-#InformationList{
-    clear: both;
-    position: absolute;
-    margin-left: 0;
-    margin-top: 200px;
 }
 #InformationOne{
     clear: both;
     position: absolute;
-    margin-left: 550px;
+    margin-left: 800px;
     margin-top: 200px;
 }
 #SessionOne{
     clear: both;
     position: absolute;
-    margin-left: 1200px;
+    margin-left: 1400px;
     margin-top: 200px;
 }
 table, th, td {
@@ -62,13 +51,9 @@ table th {
     position: absolute;
     margin-top: 0;
 }
-#ChangeInfo{
-    margin-left:600px;
-    margin-top:400px;
-}
-#ChangeSubject{
-    margin-left:600px;
-    margin-top:400px;
+#ChangeInfo,#ChangeSubject {
+    margin-left: 600px;
+    margin-top: 400px;
 }
 #InfoInput{
     position: absolute;
@@ -79,4 +64,14 @@ table th {
     position: absolute;
     margin-left: 700px;
     margin-top: 160px;
+}
+#create1,#create2{
+    position: absolute;
+    margin-left: 500px;
+    margin-top: 100px;
+}
+#editSub{
+    position: absolute;
+    margin-left: 500px;
+    margin-top: 200px;
 }

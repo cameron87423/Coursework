@@ -60,6 +60,7 @@ public class ParentController {//
             ps.setInt(1, id);
             ResultSet results = ps.executeQuery();
             if (results.next()) {
+                item.put("StudentID",id);
                 item.put("StudentName", results.getString(1));
                 item.put("Age", results.getInt(2));
                 item.put("Address1", results.getString(3));

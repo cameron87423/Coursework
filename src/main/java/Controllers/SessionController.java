@@ -19,15 +19,17 @@ public class SessionController {//
         System.out.println("Sessions/StudentSessions/" + id);
         JSONArray list = new JSONArray();
         try {
-            PreparedStatement ps = Main.db.prepareStatement("SELECT TutorID, Hours, Pay, Grade FROM Sessions WHERE StudentID = ?");
+            PreparedStatement ps = Main.db.prepareStatement("SELECT SessionID,TutorID, Hours, Pay, Grade FROM Sessions WHERE StudentID = ?");
             ps.setInt(1,id);
             ResultSet results = ps.executeQuery();
             while (results.next()) {
                 JSONObject item = new JSONObject();
-                item.put("TutorID",results.getInt(1));
-                item.put("Hours",results.getInt(2));
-                item.put("Pay",results.getDouble(3));
-                item.put("Grade",results.getString(4));
+                item.put("StudentID",id);
+                item.put("SessionID",results.getInt(1));
+                item.put("TutorID",results.getInt(2));
+                item.put("Hours",results.getInt(3));
+                item.put("Pay",results.getDouble(4));
+                item.put("Grade",results.getString(5));
                 list.add(item);
             }
             return list.toString();
@@ -44,15 +46,17 @@ public class SessionController {//
         System.out.println("Sessions/TutorSessions/" + id);
         JSONArray list = new JSONArray();
         try {
-            PreparedStatement ps = Main.db.prepareStatement("SELECT StudentID, Hours, Pay, Grade FROM Sessions WHERE TutorID = ?");
+            PreparedStatement ps = Main.db.prepareStatement("SELECT SessionID,StudentID, Hours, Pay, Grade FROM Sessions WHERE TutorID = ?");
             ps.setInt(1,id);
             ResultSet results = ps.executeQuery();
             while (results.next()) {
                 JSONObject item = new JSONObject();
-                item.put("StudentID",results.getInt(1));
-                item.put("Hours",results.getInt(2));
-                item.put("Pay",results.getDouble(3));
-                item.put("Grade",results.getString(4));
+                item.put("TutorID",id);
+                item.put("SessionID",results.getInt(1));
+                item.put("StudentID",results.getInt(2));
+                item.put("Hours",results.getInt(3));
+                item.put("Pay",results.getDouble(4));
+                item.put("Grade",results.getString(5));
                 list.add(item);
             }
             return list.toString();

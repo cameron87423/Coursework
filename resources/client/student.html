@@ -10,11 +10,18 @@
 <body onload="pageLoading()">
 <div id="pageHeader">
     <p style="float: left;" id="imageDiv"></p>
+    <button style="float: right; position:sticky" id="Profile">Profile</button>
     <h1 style="text-align: center;" id="heading"></h1>
+</div>
+<div id="create1">
+    <button id="createSub" class="editButton">create new subject</button>
+    <button id="createSes" class="editButton">create new session</button>
+</div>
+<div id="create2">
+    <button id="createInfo" class="editButton">create new Information</button>
 </div>
 <div id="first">
     <div id="TutorList"style="background: purple"></div>
-    <div id="SubjectsList"style="background: purple"></div>
     <div id="SessionsList"style="background: purple"></div>
 </div>
 <div id="second">
@@ -32,7 +39,28 @@
     </form>
     <div id="SessionOne" style="background: purple"></div>
 </div>
-
+<div id="editSub">
+    <h2 id="editHeading"></h2>
+    <form id="SubForm">
+        <input type="hidden" name="id" id="SubjectID">
+        <div>
+            <label for="Subject" class="label">Subject:</label>
+            <input type="text" name="Subject" id="Subject">
+        </div>
+        <div>
+            <label for="Student" class="label">StudentID:</label>
+            <input type="text" name="Student" id="Student">
+        </div>
+        <div>
+            <label for="Tutor" class="label">TutorID:</label>
+            <input type="text" name="Student" id="Tutor">
+        </div>
+        <div>
+            <input type="submit" value="Save" id="saveSub">
+            <input type="submit" value="Cancel" id="cancelSub">
+        </div>
+    </form>
+</div>
 <div id="ChangeInfo"><button type="button" id="changeI">Go to information page</button></div>
 <div id="ChangeSubject"><button type="button" id="changeS">Go to Subject page</button></div>
 </body>

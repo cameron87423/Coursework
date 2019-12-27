@@ -24,6 +24,7 @@ public class SubjectController {//
             ResultSet results = ps.executeQuery();
             while (results.next()) {
                 JSONObject item = new JSONObject();
+                item.put("StudentID",id);
                 item.put("SubjectName",results.getString(1));
                 item.put("TutorID",results.getInt(2));
                 list.add(item);
@@ -47,6 +48,7 @@ public class SubjectController {//
             ResultSet results = ps.executeQuery();
             while (results.next()) {
                 JSONObject item = new JSONObject();
+                item.put("TutorID",id);
                 item.put("SubjectName",results.getString(1));
                 item.put("StudentID",results.getInt(2));
                 list.add(item);

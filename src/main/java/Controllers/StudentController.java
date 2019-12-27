@@ -77,18 +77,20 @@ public class StudentController {//
             if (id == null) {
                 throw new Exception("Student's id is missing in the HTTP request's URL");
             }
-            PreparedStatement ps = Main.db.prepareStatement("SELECT Students.FName, Subject.SubjectN, Tutors.TutorID, Tutors.TFName, Tutors.TSName, Tutors.Rating FROM Students " +
+            PreparedStatement ps = Main.db.prepareStatement("SELECT Students.FName,Subject.SubjectID, Subject.SubjectN, Tutors.TutorID, Tutors.TFName, Tutors.TSName, Tutors.Rating FROM Students " +
                     "JOIN Subject ON Students.StudentID = Subject.StudentID JOIN Tutors ON Subject.TutorID = Tutors.TutorID WHERE Students.StudentID = ?");//SQL to join the two tables and select
             ps.setInt(1,id);
             ResultSet results = ps.executeQuery();
             while (results.next()) {
                 JSONObject item = new JSONObject();
+                item.put("StudentID",id);
                 item.put("StudentName",results.getString(1));
-                item.put("SubjectName",results.getString(2));
-                item.put("TutorID",results.getInt(3));
-                item.put("TutorName",results.getString(4));
-                item.put("TutorSurname",results.getString(5));
-                item.put("Rating",results.getDouble(6));
+                item.put("SubjectID",results.getString(2));
+                item.put("SubjectName",results.getString(3));
+                item.put("TutorID",results.getInt(4));
+                item.put("TutorName",results.getString(5));
+                item.put("TutorSurname",results.getString(6));
+                item.put("Rating",results.getDouble(7));
                 list.add(item);
             }
             return list.toString();
