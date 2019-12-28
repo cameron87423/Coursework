@@ -1,5 +1,4 @@
 function pageLoading() {
-    debugger;
     let name = Cookies.get("id");
     let myHTML = '<div/>'
         + '<img src="/client/img/logo.jfif"  alt="Logo"/>';
@@ -151,7 +150,6 @@ function Info(){
 
 function InfoO(event){
     event.preventDefault();
-    debugger;
     let infoOHTML = `<table>` +
         '<tr>' +
         '<th>InfoID</th>' +
@@ -228,7 +226,6 @@ function editSubject(event) {
     }else {
         document.getElementById("editHeading").innerHTML = 'Editing subject:';
     }
-    debugger;
     document.getElementById("SubjectID").value = '';
     document.getElementById("Subject").value = '';
     document.getElementById("Student").value = '';

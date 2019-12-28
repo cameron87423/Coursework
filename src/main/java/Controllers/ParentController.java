@@ -14,6 +14,57 @@ import java.util.UUID;
 @Path("Parents/")
 public class ParentController {//
 
+    @POST
+    @Path("check")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String check(@FormDataParam("id") int id, @FormDataParam("name") String name) {
+        try {
+            PreparedStatement ps1 = Main.db.prepareStatement("SELECT FName FROM Students WHERE StudentID = ?");
+            ps1.setInt(1, id);
+            ResultSet loginResults = ps1.executeQuery();
+            if (loginResults.next()) {
+                String correctPassword = loginResults.getString(1);
+                if (name.equals(correctPassword)) {
+                    JSONObject userDetails = new JSONObject();
+                    userDetails.put("stuid",id);
+                    return userDetails.toString();
+                } else {
+                    return "{\"error\": \"Incorrect name!\"}";
+                }
+            } else {
+                return "{\"error\": \"Unknown user!\"}";
+            }
+        } catch (Exception exception) {
+            System.out.println("Database error during /parent/check: " + exception.getMessage());
+            return "{\"error\": \"Server side error!\"}";
+        }
+    }
+
+    @GET
+    @Path("stu/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String PS(@PathParam("id") Integer id) {
+        System.out.println("Parents/stu/" + id);
+        JSONObject item = new JSONObject();
+        try {
+            if (id == null) {
+                throw new Exception("Parent's id is missing in the HTTP request's URL");
+            }
+            PreparedStatement ps = Main.db.prepareStatement("SELECT Students.StudentID FROM Students JOIN Parents ON Students.StudentID = Parents.StudentID WHERE ParentID = ?");
+            ps.setInt(1, id);
+            ResultSet results = ps.executeQuery();
+            if (results.next()) {
+                item.put("StudentID",1);
+            }
+            return item.toString();
+        } catch (Exception e) {
+            System.out.println("Database error: " + e.getMessage());
+            return "{\"error\": \"Unable to list item, please see server console for more info.\"}";
+        }
+
+    }
+
     @GET
     @Path("child/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -25,7 +76,7 @@ public class ParentController {//
         JSONArray list = new JSONArray();
         try {
             PreparedStatement ps = Main.db.prepareStatement("SELECT Students.FName, Students.Age, Students.Address1,Students.Address2, Parents.PFName, Parents.PSName," +
-                    "FROM Students JOIN Parents ON Students.StudentID = Parents.StuedntID WHERE StudentID = ?");//SQL to join the two tables and select
+                    "FROM Students JOIN Parents ON Students.StudentID = Parents.StudentID WHERE StudentID = ?");//SQL to join the two tables and select
             ps.setInt(1,id);
             ResultSet results = ps.executeQuery();
             while (results.next()) {
@@ -56,7 +107,7 @@ public class ParentController {//
                 throw new Exception("Parent's id is missing in the HTTP request's URL");
             }
             PreparedStatement ps = Main.db.prepareStatement("SELECT Students.FName, Students.Age, Students.Address1,Students.Address2, Parents.PFName, Parents.PSName " +
-                    "FROM Students JOIN Parents ON Students.StudentID = Parents.StuedntID WHERE StudentID = ?");
+                    "FROM Students JOIN Parents ON Students.StudentID = Parents.StudentID WHERE StudentID = ?");
             ps.setInt(1, id);
             ResultSet results = ps.executeQuery();
             if (results.next()) {
@@ -93,7 +144,10 @@ public class ParentController {//
                     ps2.setString(1, token);
                     ps2.setInt(2, id);
                     ps2.executeUpdate();
-                    return "{\"token\": \"" + token + "\"}";
+                    JSONObject userDetails = new JSONObject();
+                    userDetails.put("id",id);
+                    userDetails.put("token",token);
+                    return userDetails.toString();
                 } else {
                     return "{\"error\": \"Incorrect password!\"}";
                 }
@@ -145,7 +199,7 @@ public class ParentController {//
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("parents/new");
-            PreparedStatement ps = Main.db.prepareStatement("INSERT INTO Parents (PFName, PSName, PPassword, StudentID) VALUES(?,?,?,?)");
+            PreparedStatement ps = Main.db.prepareStatement("INSERT INTO Parents (PFName, PSName, Password, StudentID) VALUES(?,?,?,?)");
             //SQL for inserting a new record into a table
             ps.setString(1, name);
             ps.setString(2, surname);
@@ -203,7 +257,7 @@ public class ParentController {//
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("parent/updatePassword");
-            PreparedStatement ps = Main.db.prepareStatement("UPDATE Parents SET PPassword = ? WHERE PFName = ?, ParentID = ?");
+            PreparedStatement ps = Main.db.prepareStatement("UPDATE Parents SET Password = ? WHERE PFName = ?, ParentID = ?");
             ps.setString(1, password);
             ps.setString(2, name);
             ps.setInt(3, parentID);

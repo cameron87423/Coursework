@@ -69,20 +69,21 @@ public class TutorController{//
     @Path("StudentList/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String TutorList(@PathParam("id") Integer id) {//shows the info of both the parent and the student
-        System.out.println("Students/StudentList/" + id);
+        System.out.println("Tutors/StudentList/" + id);
         JSONArray list = new JSONArray();
         try {
             if (id == null) {
                 throw new Exception("Tutor's id is missing in the HTTP request's URL");
             }
-            PreparedStatement ps = Main.db.prepareStatement("SELECT Tutors.TFName,Subject.SubjectID Subject.SubjectN, Students.StudentID, Students.FName, Students.SName" +
-                    "FROM Tutors JOIN Subjects ON Tutors.TutorID = Subject.TutorID JOIN Students ON Subject.StudentID = Students.StudentID WHERE TutorID = ?");//SQL to join the two tables and select
+            PreparedStatement ps = Main.db.prepareStatement("SELECT Tutors.TFName,Subject.SubjectID, Subject.SubjectN, Students.StudentID, Students.FName, Students.SName FROM Tutors" +
+                    " JOIN Subject ON Tutors.TutorID = Subject.TutorID JOIN Students ON Subject.StudentID = Students.StudentID WHERE Tutors.TutorID = ?");//SQL to join the two tables and select
+            ps.setInt(1,id);
             ResultSet results = ps.executeQuery();
             while (results.next()) {
                 JSONObject item = new JSONObject();
                 item.put("TutorID",id);
                 item.put("TutorName",results.getString(1));
-                item.put("SubjectID",results.getString(2));
+                item.put("SubjectID",results.getInt(2));
                 item.put("SubjectName",results.getString(3));
                 item.put("StudentID",results.getInt(4));
                 item.put("StudentName",results.getString(5));
@@ -113,7 +114,10 @@ public class TutorController{//
                     ps2.setString(1, token);
                     ps2.setInt(2, id);
                     ps2.executeUpdate();
-                    return "{\"token\": \""+ token + "\"}";
+                    JSONObject userDetails = new JSONObject();
+                    userDetails.put("id",id);
+                    userDetails.put("token",token);
+                    return userDetails.toString();
                 } else {
                     return "{\"error\": \"Incorrect password!\"}";
                 }
@@ -165,7 +169,7 @@ public class TutorController{//
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("tutors/new");
-            PreparedStatement ps = Main.db.prepareStatement("INSERT INTO Tutors (TFName, TSName, TPassword, Gender, Experience, Rating) VALUES(?,?,?,?,?,?)");
+            PreparedStatement ps = Main.db.prepareStatement("INSERT INTO Tutors (TFName, TSName, Password, Gender, Experience, Rating) VALUES(?,?,?,?,?,?)");
             //SQL for inserting a new record into a table
             ps.setString(1,name);
             ps.setString(2,surname);
@@ -223,7 +227,7 @@ public class TutorController{//
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("tutor/updatePassword");
-            PreparedStatement ps = Main.db.prepareStatement("UPDATE Tutors SET TPassword = ? WHERE TFName = ?,TutorID = ?");
+            PreparedStatement ps = Main.db.prepareStatement("UPDATE Tutors SET Password = ? WHERE TFName = ?,TutorID = ?");
             ps.setString(1, password);
             ps.setString(2, name);
             ps.setInt(3,tutorID);

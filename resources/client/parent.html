@@ -1,10 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Parent page</title>
+    <link rel="stylesheet" type="text/css" href="/client/css/styles.css">
+    <script src="/client/js/parent.js"></script>
+    <script src="/client/js/login.js"></script>
+    <script src="/client/js/js.cookie.js"></script>
 </head>
-<body>
-
+<body onload="pageLoading()">
+<div id="pageHeader">
+    <p style="float: left;" id="imageDiv"></p>
+    <button style="float: right; position:sticky" id="Profile">Profile</button>
+    <h1 style="text-align: center;" id="heading"></h1>
+</div>
+<div id="first">
+    <div id="TutorList" style="background: purple"></div>
+    <div id="SessionsList" style="background: purple"></div>
+    <div id="StudentInfo" style="background: purple"></div>
+</div>
+<div id="second">
+    <div id="InformationList" style="background: purple"></div>
+    <div id="InfoInput">
+        <form id="InfoIn">
+            <input type="text" name="TutorID" id="Info" value="0">
+            <input type="submit" value="InfoSearch" id="ISearch">
+        </form>
+    </div>
+    <div id="InformationOne" style="background: purple"></div>
+    <form id="SessionInput">
+        <input type="text" name="TutorID?" id="sess" value="0">
+        <input type="submit" value="SessionSearch" id="SSearch">
+    </form>
+    <div id="SessionOne" style="background: purple"></div>
+</div>
+<div id="ChangeInfo"><button type="button" id="changeI">Go to information page</button></div>
+<div id="ChangeSubject"><button type="button" id="changeS">Go to Subject page</button></div>
 </body>
-</html>

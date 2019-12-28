@@ -2,15 +2,13 @@ function pageLoad() {
     let myHTML = '<div/>'
         +'<img src="/client/img/logo.jfif"  alt="Logo"/>'
     document.getElementById("imageDiv").innerHTML = myHTML;
-    document.getElementById("loginButton").addEventListener("click", login);
 }
 
-function login(event) {
-    event.preventDefault();
+function login(i) {
     debugger;
     const form = document.getElementById("loginForm");
     const formData = new FormData(form);
-    if (document.getElementsByName("user").value = "student") {
+    if (i === 1) {
         fetch("/Students/login", {method: 'post', body: formData}
         ).then(response => response.json()
         ).then(responseData => {
@@ -22,7 +20,7 @@ function login(event) {
                 window.location.href = '/client/student.html';
             }
         });
-    }else if (document.getElementsByName("user").value = "tutor") {
+    }else if (i === 2) {
         fetch("/Tutors/Tlogin", {method: 'post', body: formData}
         ).then(response => response.json()
         ).then(responseData => {
@@ -34,7 +32,7 @@ function login(event) {
                 window.location.href = '/client/tutor.html';
             }
         });
-    }else if (document.getElementsByName("user").value = "parent") {
+    }else if (i === 3) {
         fetch("/Parents/Plogin", {method: 'post', body: formData}
         ).then(response => response.json()
         ).then(responseData => {
@@ -43,7 +41,7 @@ function login(event) {
             } else {
                 Cookies.set("username", responseData.id);
                 Cookies.set("token", responseData.token);
-                window.location.href = '/client/parent.html';
+                window.location.href = '/client/parentcheck.html';
             }
         });
     }
