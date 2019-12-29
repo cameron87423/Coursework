@@ -39,7 +39,7 @@ function login(i) {
             if (responseData.hasOwnProperty('error')) {
                 alert(responseData.error);
             } else {
-                Cookies.set("username", responseData.id);
+                Cookies.set("id", responseData.id);
                 Cookies.set("token", responseData.token);
                 window.location.href = '/client/parentcheck.html';
             }

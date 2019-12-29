@@ -16,7 +16,7 @@ function checker(event){
         if (responseData.hasOwnProperty('error')) {
             alert(responseData.error);
         } else {
-            Cookies.set("stuid", responseData.id);
+            Cookies.set("stuid", responseData.stuid);
             window.location.href = '/client/parent.html';
         }
     });
