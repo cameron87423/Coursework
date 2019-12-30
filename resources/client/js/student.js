@@ -51,8 +51,8 @@ function pageLoading() {
                     `<td>${student.TutorSurname}</td>` +
                     `<td>${student.Rating}</td>` +
                     `<td class="last">` +
-                    `<button class='editSub' data-id='${student.StudentID}'>Edit</button>` +
-                    `<button class='deleteSub' data-id='${student.StudentID}'>Delete</button>` +
+                    `<button class='editSub' data-id='${student.SubjectID}'>Edit</button>` +
+                    `<button class='deleteSub' data-id='${student.SubjectID}'>Delete</button>` +
                     `</td>` +
                     `</tr>`;
             }
@@ -226,10 +226,10 @@ function editSubject(event) {
     }else {
         document.getElementById("editHeading").innerHTML = 'Editing subject:';
     }
-    document.getElementById("SubjectID").value = '';
-    document.getElementById("Subject").value = '';
-    document.getElementById("Student").value = '';
-    document.getElementById("Tutor").value = '';
+    //document.getElementById("SubjectID").value = '';
+    document.getElementById("subjectname").value = '';
+    document.getElementById("studentID").value = '';
+    document.getElementById("tutorID").value = '';
 
     document.getElementById("first").style.display = 'none';
     document.getElementById("create1").style.display = 'none';
@@ -239,7 +239,7 @@ function editSubject(event) {
 function saveEditSubject(event) {
     debugger;
     event.preventDefault();
-    const id = document.getElementById("SubjectID").value;
+    const id = 1//document.getElementById("subjectID").value;
     const form = document.getElementById("SubForm");
     const formData = new FormData(form);
     let apiPath = '';
