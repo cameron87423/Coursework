@@ -89,16 +89,16 @@ public class SubjectController {//
     @Path("new")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String Sinsert(@FormDataParam("subjectname") String subjectname, @FormDataParam("studentID") Integer studentID,
+    public String Sinsert(@FormDataParam("subjectName") String subjectName, @FormDataParam("studentID") Integer studentID,
                          @FormDataParam("tutorID") Integer tutorID){
         try{
-            if (subjectname == null || tutorID == null || studentID == null){
+            if (subjectName == null || tutorID == null || studentID == null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
             System.out.println("subjects/new");
             PreparedStatement ps = Main.db.prepareStatement("INSERT INTO Subject(SubjectN,StudentID,TutorID) VALUES(?,?,?)");
             //SQL for inserting a new record into a table
-            ps.setString(1,subjectname);
+            ps.setString(1,subjectName);
             ps.setInt(2,studentID);
             ps.setInt(3,tutorID);
             ps.execute();
@@ -115,11 +115,16 @@ public class SubjectController {//
     @Produces(MediaType.APPLICATION_JSON)
     public String Supdate(@FormDataParam("subjectID") Integer subjectID,@FormDataParam("studentID") Integer studentID,@FormDataParam("tutorID") Integer tutorID,
                          @FormDataParam("subjectName") String subjectName){
+        System.out.println(subjectID);
+        System.out.println(studentID);
+        System.out.println(tutorID);
+        System.out.println(subjectName);
+
         try{
             if (subjectName == null || studentID == null || tutorID == null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
             }
-            System.out.println("subject/update");
+            System.out.println("subject/change");
             PreparedStatement ps = Main.db.prepareStatement("UPDATE Subject SET SubjectN = ?,StudentID = ?,TutorID = ? WHERE SubjectID = ?");
             ps.setString(1, subjectName);
             ps.setInt(2, studentID);

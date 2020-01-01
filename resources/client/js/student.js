@@ -223,11 +223,12 @@ function editSubject(event) {
     const id = event.target.getAttribute("data-id");
     if (id === null) {
         document.getElementById("editHeading").innerHTML = 'Add new subject:';
+        document.getElementById("subjectID").value = '';
     }else {
         document.getElementById("editHeading").innerHTML = 'Editing subject:';
+        document.getElementById("subjectID").value = event.target.getAttribute("data-id");
     }
-    //document.getElementById("SubjectID").value = '';
-    document.getElementById("subjectname").value = '';
+    document.getElementById("subjectName").value = '';
     document.getElementById("studentID").value = '';
     document.getElementById("tutorID").value = '';
 
@@ -239,7 +240,7 @@ function editSubject(event) {
 function saveEditSubject(event) {
     debugger;
     event.preventDefault();
-    const id = 1//document.getElementById("subjectID").value;
+    const id = document.getElementById("subjectID").value;
     const form = document.getElementById("SubForm");
     const formData = new FormData(form);
     let apiPath = '';
