@@ -11,6 +11,7 @@
 <div id="pageHeader">
     <p style="float: left;" id="imageDiv"></p>
     <button style="float: right; position:sticky" id="Profile">Profile</button>
+    <button style="float: right; position:sticky" id="Logout" onclick="Tlogout()">Logout</button>
     <h1 style="text-align: center;" id="heading"></h1>
 </div>
 <div id="create1">
@@ -38,6 +39,96 @@
         <input type="submit" value="SessionSearch" id="SSearch">
     </form>
     <div id="SessionOne" style="background: purple"></div>
+</div>
+<div id="editSub">
+    <h2 id="editHeading"></h2>
+    <form id="SubForm">
+        <input type="hidden" name="subjectID" id="subjectID">
+        <div>
+            <label for="subjectName" class="label">Subject:</label>
+            <input type="text" name="subjectName" id="subjectName">
+        </div>
+        <div>
+            <label for="studentID" class="label">StudentID:</label>
+            <input type="text" name="studentID" id="studentID">
+        </div>
+        <div>
+            <label for="tutorID" class="label">TutorID:</label>
+            <input type="text" name="tutorID" id="tutorID">
+        </div>
+        <div>
+            <input type="submit" value="Save" id="saveSub">
+            <input type="submit" value="Cancel" id="cancelSub">
+        </div>
+    </form>
+</div>
+<div id="editSes">
+    <h2 id="editHead"></h2>
+    <form id="SesForm">
+        <input type="hidden" name="sessionID" id="sessionID">
+        <div>
+            <label for="review" class="label">Review:</label>
+            <input type="text" name="review" id="review">
+        </div>
+        <div>
+            <label for="hours" class="label">Hour(s):</label>
+            <input type="text" name="hours" id="hours">
+        </div>
+        <div>
+            <label for="pay" class="label">Payment:</label>
+            <input type="text" name="pay" id="pay">
+        </div>
+        <div>
+            <label for="grade" class="label">Grade:</label>
+            <input type="text" name="grade" id="grade">
+        </div>
+        <div>
+            <label for="studentI" class="label">StudentID:</label>
+            <input type="text" name="studentID" id="studentI">
+        </div>
+        <div>
+            <label for="tutorI" class="label">TutorID:</label>
+            <input type="text" name="tutorID" id="tutorI">
+        </div>
+        <div>
+            <input type="submit" value="Save" id="saveSes">
+            <input type="submit" value="Cancel" id="cancelSes">
+        </div>
+    </form>
+</div>
+<div id="editInfo">
+    <h2 id="editHe"></h2>
+    <form id="InfoForm">
+        <input type="hidden" name="infoID" id="infoID">
+        <div>
+            <label for="thours" class="label">Total hours:</label>
+            <input type="text" name="thours" id="thours">
+        </div>
+        <div>
+            <label for="tpay" class="label">Total pay:</label>
+            <input type="text" name="tpay" id="tpay">
+        </div>
+        <div>
+            <label for="rpay" class="label">Remaining pay:</label>
+            <input type="text" name="rpay" id="rpay">
+        </div>
+        <div>
+            <label for="tgrade" class="label">Target grade:</label>
+            <input type="text" name="tgrade" id="tgrade">
+        </div>
+        <div>
+            <label for="student" class="label">StudentID:</label>
+            <input type="text" name="studentID" id="student">
+        </div>
+        <div>
+            <label for="tutor" class="label">TutorID:</label>
+            <input type="text" name="tutorID" id="tutor">
+        </div>
+        <div>
+            <input type="submit" value="Save" id="saveInfo">
+            <input type="submit" value="Cancel" id="cancelInfo">
+        </div>
+    </form>
 </div>
 <div id="ChangeInfo"><button type="button" id="changeI">Go to information page</button></div>
 <div id="ChangeSubject"><button type="button" id="changeS">Go to Subject page</button></div>

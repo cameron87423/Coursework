@@ -32,5 +32,113 @@
         </div>
     </form>
 </div>
+<div id ="create">
+    <button onclick="createStu()">Create student account</button>
+    <button onclick="createTu()">Create tutor account</button>
+    <button onclick="createPa()">Create parent account</button>
+</div>
+<div id="createStu">
+    <h2 id="Stu">Creating new Student</h2>
+    <form id="StuForm">
+        <div>
+            <label for="name" class="label">name:</label>
+            <input type="text" name="name" id="name">
+        </div>
+        <div>
+            <label for="surname" class="label">surname:</label>
+            <input type="text" name="surname" id="surname">
+        </div>
+        <div>
+            <label for="age" class="label">age:</label>
+            <input type="text" name="age" id="age">
+        </div>
+        <div>
+            <label for="gender" class="label">gender:</label>
+            <input type="text" name="gender" id="gender">
+        </div>
+        <div>
+            <label for="address1" class="label">address1:</label>
+            <input type="text" name="address1" id="address1">
+        </div>
+        <div>
+            <label for="pass" class="label">password:</label>
+            <input type="password" name="password" id="pass">
+        </div>
+        <div>
+            <label for="cpass" class="label">confirm password:</label>
+            <input type="password" name="cpass" id="cpass">
+        </div>
+        <div>
+            <input type="submit" value="Save" id="saveStu">
+            <input type="submit" value="Cancel" id="cancelStu">
+        </div>
+    </form>
+</div>
+<div id="createTu">
+    <h2 id="Tu">Creating new Tutor</h2>
+    <form id="TuForm">
+        <div>
+            <label for="tname" class="label">name:</label>
+            <input type="text" name="name" id="tname">
+        </div>
+        <div>
+            <label for="surname" class="label">surname:</label>
+            <input type="text" name="surname" id="tsurname">
+        </div>
+        <div>
+            <label for="tgender" class="label">gender:</label>
+            <input type="text" name="gender" id="tgender">
+        </div>
+        <div>
+            <label for="experience" class="label">experience:</label>
+            <input type="text" name="experience" id="experience">
+        </div>
+        <div>
+            <label for="rating" class="label">rating:</label>
+            <input type="text" name="rating" id="rating">
+        </div>
+        <div>
+            <label for="tpass" class="label">password:</label>
+            <input type="password" name="password" id="tpass">
+        </div>
+        <div>
+            <label for="tcpass" class="label">confirm password:</label>
+            <input type="password" name="cpass" id="tcpass">
+        </div>
+        <div>
+            <input type="submit" value="Save" id="saveTu">
+            <input type="submit" value="Cancel" id="cancelTu">
+        </div>
+    </form>
+</div>
+<div id="createPa">
+    <h2 id="Pa">Creating new Parent</h2>
+    <form id="PaForm">
+        <div>
+            <label for="pname" class="label">name:</label>
+            <input type="text" name="name" id="pname">
+        </div>
+        <div>
+            <label for="psurname" class="label">surname:</label>
+            <input type="text" name="surname" id="psurname">
+        </div>
+        <div>
+            <label for="stud" class="label">students ID:</label>
+            <input type="text" name="studentID" id="stud">
+        </div>
+        <div>
+            <label for="ppass" class="label">password:</label>
+            <input type="password" name="password" id="ppass">
+        </div>
+        <div>
+            <label for="pcpass" class="label">confirm password:</label>
+            <input type="password" name="cpass" id="pcpass">
+        </div>
+        <div>
+            <input type="submit" value="Save" id="savePa">
+            <input type="submit" value="Cancel" id="cancelPa">
+        </div>
+    </form>
+</div>
 </body>
 </html>

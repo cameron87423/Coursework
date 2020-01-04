@@ -12,10 +12,19 @@ function pageLoading() {
     document.getElementById("ChangeSubject").style.display='none';
     document.getElementById("create2").style.display='none';
     document.getElementById("editSub").style.display='none';
+    document.getElementById("editSes").style.display='none';
+    document.getElementById("editInfo").style.display='none';
     document.getElementById("ISearch").addEventListener("click", InfoO);
     document.getElementById("SSearch").addEventListener("click", SessionO);
+    document.getElementById("createSub").addEventListener("click", editSubject);
+    document.getElementById("createSes").addEventListener("click", editSession);
+    document.getElementById("createInfo").addEventListener("click", editInfo);
     document.getElementById("saveSub").addEventListener("click", saveEditSubject);
     document.getElementById("cancelSub").addEventListener("click", cancelEditSubject);
+    document.getElementById("saveSes").addEventListener("click", saveEditSession);
+    document.getElementById("cancelSes").addEventListener("click", cancelEditSession);
+    document.getElementById("saveInfo").addEventListener("click", saveEditInfo);
+    document.getElementById("cancelInfo").addEventListener("click", cancelEditInfo);
 
     let I = document.getElementById("changeI");
     I.onclick = Info;
@@ -63,6 +72,10 @@ function pageLoading() {
         for (let button of editButtons) {
             button.addEventListener("click", editSubject);
         }
+        let deleteButtons = document.getElementsByClassName("deleteSub");
+        for (let button of deleteButtons) {
+            button.addEventListener("click", deleteSub);
+        }
     });
 
     let sessionsHTML = `<table>` +
@@ -73,6 +86,7 @@ function pageLoading() {
         '<th>Hours</th>' +
         '<th>Pay</th>' +
         '<th>Grade</th>' +
+        '<th>Review</th>' +
         '<th class="last">Options</th>' +
         '</tr>';
     fetch('/Sessions/StudentSessions/' + Cookies.get("id"), {method: 'get'}
@@ -89,16 +103,24 @@ function pageLoading() {
                     `<td>${student.Hours}</td>` +
                     `<td>${student.Pay}</td>` +
                     `<td>${student.Grade}</td>` +
+                    `<td>${student.Review}</td>` +
                     `<td class="last">` +
-                    `<button class='editSes' data-id='${student.StudentID}'>Edit</button>` +
-                    `<button class='deleteSes' data-id='${student.StudentID}'>Delete</button>` +
+                    `<button class='editSes' data-id='${student.SessionID}'>Edit</button>` +
+                    `<button class='deleteSes' data-id='${student.SessionID}'>Delete</button>` +
                     `</td>` +
                     `</tr>`;
             }
         }
         sessionsHTML += '</table>';
         document.getElementById("SessionsList").innerHTML = sessionsHTML;
-
+        let editButtons = document.getElementsByClassName("editSes");
+        for (let button of editButtons) {
+            button.addEventListener("click", editSession);
+        }
+        let deleteButtons = document.getElementsByClassName("deleteSes");
+        for (let button of deleteButtons) {
+            button.addEventListener("click", deleteSession);
+        }
     });
 }
 
@@ -145,6 +167,14 @@ function Info(){
         }
         infoHTML += '</table>';
         document.getElementById("InformationList").innerHTML = infoHTML;
+        let editButtons = document.getElementsByClassName("editInfo");
+        for (let button of editButtons) {
+            button.addEventListener("click", editInfo);
+        }
+        let deleteButtons = document.getElementsByClassName("deleteInfo");
+        for (let button of deleteButtons) {
+            button.addEventListener("click", deleteInfo);
+        }
     });
 }
 
@@ -196,6 +226,7 @@ function SessionO(event){
         '<th>Hour(s)</th>' +
         '<th>Pay</th>' +
         '<th>Grade</th>' +
+        '<th>Review</th>' +
         '</tr>';
     const id = document.getElementById("sess");
     fetch('/Sessions/ListSessions/' + Cookies.get("id") +'/'+ id.value , {method: 'get'}
@@ -212,6 +243,7 @@ function SessionO(event){
                     `<td>${student.Hours}</td>` +
                     `<td>${student.Pay}</td>` +
                     `<td>${student.Grade}</td>` +
+                    `<td>${student.Review}</td>` +
                     `</tr>`;
             }
         }
@@ -219,6 +251,7 @@ function SessionO(event){
         document.getElementById("SessionOne").innerHTML = sessHTML;
     });
 }
+
 function editSubject(event) {
     const id = event.target.getAttribute("data-id");
     if (id === null) {
@@ -237,8 +270,8 @@ function editSubject(event) {
     document.getElementById("ChangeInfo").style.display = 'none';
     document.getElementById("editSub").style.display = 'block';
 }
+
 function saveEditSubject(event) {
-    debugger;
     event.preventDefault();
     const id = document.getElementById("subjectID").value;
     const form = document.getElementById("SubForm");
@@ -255,17 +288,176 @@ function saveEditSubject(event) {
         if (responseData.hasOwnProperty('error')) {
             alert(responseData.error);
         } else {
-            document.getElementById("first").style.display = 'block';
-            document.getElementById("create1").style.display = 'block';
-            document.getElementById("ChangeInfo").style.display = 'block';
-            document.getElementById("editSub").style.display = 'none';
+            pageLoading()
         }
     });
 }
+
 function cancelEditSubject(event) {
     event.preventDefault();
     document.getElementById("first").style.display = 'block';
     document.getElementById("create1").style.display = 'block';
     document.getElementById("ChangeInfo").style.display = 'block';
     document.getElementById("editSub").style.display = 'none';
+}
+
+function deleteSub(event){
+    const ok = confirm("Are you sure?");
+    if (ok === true) {
+        let id = event.target.getAttribute("data-id");
+        let formData = new FormData();
+        formData.append("id", id);
+        fetch('/Subjects/delete', {method: 'post', body: formData}
+        ).then(response => response.json()
+        ).then(responseData => {
+                if (responseData.hasOwnProperty('error')) {
+                    alert(responseData.error);
+                } else {
+                    pageLoading();
+                }
+            }
+        );
+    }
+}
+
+function editSession(event) {
+    const id = event.target.getAttribute("data-id");
+    if (id === null) {
+        document.getElementById("editHead").innerHTML = 'Add new session:';
+        document.getElementById("sessionID").value = '';
+    }else {
+        document.getElementById("editHead").innerHTML = 'Editing session:';
+        document.getElementById("sessionID").value = event.target.getAttribute("data-id");
+    }
+    document.getElementById("review").value = '';
+    document.getElementById("hours").value = '';
+    document.getElementById("pay").value = '';
+    document.getElementById("grade").value = '';
+    document.getElementById("studentI").value = '';
+    document.getElementById("tutorI").value = '';
+
+    document.getElementById("first").style.display = 'none';
+    document.getElementById("create1").style.display = 'none';
+    document.getElementById("ChangeInfo").style.display = 'none';
+    document.getElementById("editSes").style.display='block';
+}
+
+function saveEditSession(event) {
+    event.preventDefault();
+    const id = document.getElementById("sessionID").value;
+    const form = document.getElementById("SesForm");
+    const formData = new FormData(form);
+    let apiPath = '';
+    if (id === '') {
+        apiPath = '/Sessions/new';
+    } else {
+        apiPath = '/Sessions/change';
+    }
+    fetch(apiPath, {method: 'post', body: formData}
+    ).then(response => response.json()
+    ).then(responseData => {
+        if (responseData.hasOwnProperty('error')) {
+            alert(responseData.error);
+        } else {
+            pageLoading()
+        }
+    });
+}
+
+function cancelEditSession(event) {
+    event.preventDefault();
+    document.getElementById("first").style.display = 'block';
+    document.getElementById("create1").style.display = 'block';
+    document.getElementById("ChangeInfo").style.display = 'block';
+    document.getElementById("editSes").style.display = 'none';
+}
+
+function deleteSession(event){
+    const ok = confirm("Are you sure?");
+    if (ok === true) {
+        let id = event.target.getAttribute("data-id");
+        let formData = new FormData();
+        formData.append("id", id);
+        fetch('/Sessions/delete', {method: 'post', body: formData}
+        ).then(response => response.json()
+        ).then(responseData => {
+                if (responseData.hasOwnProperty('error')) {
+                    alert(responseData.error);
+                } else {
+                    pageLoading();
+                }
+            }
+        );
+    }
+}
+
+function editInfo(event) {
+    const id = event.target.getAttribute("data-id");
+    if (id === null) {
+        document.getElementById("editHe").innerHTML = 'Add new information:';
+        document.getElementById("infoID").value = '';
+    }else {
+        document.getElementById("editHe").innerHTML = 'Editing information:';
+        document.getElementById("infoID").value = event.target.getAttribute("data-id");
+    }
+    document.getElementById("thours").value = '';
+    document.getElementById("tpay").value = '';
+    document.getElementById("rpay").value = '';
+    document.getElementById("tgrade").value = '';
+    document.getElementById("student").value = '';
+    document.getElementById("tutor").value = '';
+
+    document.getElementById("second").style.display = 'none';
+    document.getElementById("create2").style.display = 'none';
+    document.getElementById("ChangeSubject").style.display = 'none';
+    document.getElementById("editInfo").style.display='block';
+}
+
+function saveEditInfo(event) {
+    event.preventDefault();
+    const id = document.getElementById("infoID").value;
+    const form = document.getElementById("InfoForm");
+    const formData = new FormData(form);
+    let apiPath = '';
+    if (id === '') {
+        apiPath = '/Information/new';
+    } else {
+        apiPath = '/Information/change';
+    }
+    fetch(apiPath, {method: 'post', body: formData}
+    ).then(response => response.json()
+    ).then(responseData => {
+        if (responseData.hasOwnProperty('error')) {
+            alert(responseData.error);
+        } else {
+            pageLoading()
+        }
+    });
+}
+
+function cancelEditInfo(event) {
+    event.preventDefault();
+    document.getElementById("first").style.display = 'block';
+    document.getElementById("create1").style.display = 'block';
+    document.getElementById("ChangeInfo").style.display = 'block';
+    document.getElementById("editInfo").style.display = 'none';
+}
+
+function deleteInfo(event){
+    const ok = confirm("Are you sure?");
+    if (ok === true) {
+        let id = event.target.getAttribute("data-id");
+        let formData = new FormData();
+        formData.append("id", id);
+        fetch('/Information/delete', {method: 'post', body: formData}
+        ).then(response => response.json()
+        ).then(responseData => {
+                if (responseData.hasOwnProperty('error')) {
+                    alert(responseData.error);
+                } else {
+                    pageLoading();
+                }
+            }
+        );
+    }
 }

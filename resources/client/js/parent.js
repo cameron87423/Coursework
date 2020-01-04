@@ -60,6 +60,7 @@ function pageLoading() {
         '<th>Hours</th>' +
         '<th>Pay</th>' +
         '<th>Grade</th>' +
+        '<th>Review</th>' +
         '</tr>';
     fetch('/Sessions/StudentSessions/' + Cookies.get("stuid"), {method: 'get'}
     ).then(response => response.json()
@@ -75,6 +76,7 @@ function pageLoading() {
                     `<td>${student.Hours}</td>` +
                     `<td>${student.Pay}</td>` +
                     `<td>${student.Grade}</td>` +
+                    `<td>${student.Review}</td>` +
                     `</tr>`;
             }
         }
@@ -171,6 +173,7 @@ function SessionO(event){
         '<th>Hour(s)</th>' +
         '<th>Pay</th>' +
         '<th>Grade</th>' +
+        '<th>Review</th>' +
         '</tr>';
     const id = document.getElementById("sess");
     fetch('/Sessions/ListSessions/' + Cookies.get("stuid") +'/'+ id.value , {method: 'get'}
@@ -187,6 +190,7 @@ function SessionO(event){
                     `<td>${student.Hours}</td>` +
                     `<td>${student.Pay}</td>` +
                     `<td>${student.Grade}</td>` +
+                    `<td>${student.Review}</td>` +
                     `</tr>`;
             }
         }
