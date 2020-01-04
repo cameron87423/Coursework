@@ -8,7 +8,7 @@ h1 {
 }
 .editSub, .deleteSub, #saveSub, #cancelSub , .editSes, .deleteSes, #saveSes, #cancelSes
 , .editInfo, .deleteInfo, #saveInfo, #cancelInfo, #createSub, #createSes , #createInfo
-, #Logout, #Profile, #changeI, #changeS, #ISearch, #SSearch{
+, #Logout, #Profile, #changeI, #changeS, #ISearch, #SSearch, #a, #b, #c, #d, #e, #f{
     color: black;
     font-size: 14px;
     border: none;
