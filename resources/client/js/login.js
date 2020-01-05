@@ -104,6 +104,7 @@ function createStu() {
     document.getElementById("age").value = '';
     document.getElementById("gender").value = '';
     document.getElementById("address1").value = '';
+    document.getElementById("address2").value = '';
     document.getElementById("pass").value = '';
     document.getElementById("cpass").value = '';
 
@@ -112,13 +113,14 @@ function createStu() {
     document.getElementById("createStu").style.display = 'block';
 }
 function saveCreateStu(event) {
+    debugger;
     event.preventDefault();
     if(document.getElementById("pass").value !== document.getElementById("cpass").value){
         alert("passwords do not match");
     }else {
         const form = document.getElementById("StuForm");
         const formData = new FormData(form);
-        fetch("Students/new", {method: 'post', body: formData}
+        fetch('/Students/new', {method: 'post', body: formData}
         ).then(response => response.json()
         ).then(responseData => {
             if (responseData.hasOwnProperty('error')) {
@@ -156,7 +158,7 @@ function saveCreateTu(event) {
     }else {
         const form = document.getElementById("TuForm");
         const formData = new FormData(form);
-        fetch("Tutors/new", {method: 'post', body: formData}
+        fetch("/Tutors/new", {method: 'post', body: formData}
         ).then(response => response.json()
         ).then(responseData => {
             if (responseData.hasOwnProperty('error')) {
@@ -192,7 +194,7 @@ function saveCreatePa(event) {
     }else {
         const form = document.getElementById("PaForm");
         const formData = new FormData(form);
-        fetch("Parents/new", {method: 'post', body: formData}
+        fetch("/Parents/new", {method: 'post', body: formData}
         ).then(response => response.json()
         ).then(responseData => {
             if (responseData.hasOwnProperty('error')) {
