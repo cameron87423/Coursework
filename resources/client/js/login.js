@@ -113,7 +113,6 @@ function createStu() {
     document.getElementById("createStu").style.display = 'block';
 }
 function saveCreateStu(event) {
-    debugger;
     event.preventDefault();
     if(document.getElementById("pass").value !== document.getElementById("cpass").value){
         alert("passwords do not match");
