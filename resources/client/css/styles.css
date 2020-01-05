@@ -8,7 +8,9 @@ h1 {
 }
 .editSub, .deleteSub, #saveSub, #cancelSub , .editSes, .deleteSes, #saveSes, #cancelSes
 , .editInfo, .deleteInfo, #saveInfo, #cancelInfo, #createSub, #createSes , #createInfo
-, #Logout, #Profile, #changeI, #changeS, #ISearch, #SSearch, #a, #b, #c, #d, #e, #f{
+, #Logout, #Profile, #changeI, #changeS, #ISearch, #SSearch, #a, #b, #c, #d, #e, #f
+, #saveStu, #cancelStu, #saveTu, #cancelTu, #savePa, #cancelPa, #savePassStu, #cancelPassStu,
+#savePassTu, #cancelPassTu, #savePassPa, #cancelPassPa, #update, #pass, #delete, #Homepage{
     color: black;
     font-size: 14px;
     border: none;
@@ -17,7 +19,8 @@ h1 {
     transition-duration: 0.4s;
     margin: 2px;
 }
-#LoginBox, #editSub, #editSes, #editInfo, #createStu, #createTu, #createPa, #create{
+#LoginBox, #editSub, #editSes, #editInfo, #createStu, #createTu, #createPa, #create, #disStu
+, #disTu, #disPa, #del, #editStu, #editTu, #editPa, #passStu, #passTu, #passPa{
     background: purple;
     margin: auto;
     width: 25%;

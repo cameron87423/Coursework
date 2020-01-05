@@ -106,18 +106,17 @@ public class ParentController {//
             if (id == null) {
                 throw new Exception("Parent's id is missing in the HTTP request's URL");
             }
-            PreparedStatement ps = Main.db.prepareStatement("SELECT Students.FName, Students.Age, Students.Address1,Students.Address2, Parents.PFName, Parents.PSName " +
+            PreparedStatement ps = Main.db.prepareStatement("SELECT Students.FName, Students.Address1,Students.Address2, Parents.PFName, Parents.PSName " +
                     "FROM Students JOIN Parents ON Students.StudentID = Parents.StudentID WHERE StudentID = ?");
             ps.setInt(1, id);
             ResultSet results = ps.executeQuery();
             if (results.next()) {
                 item.put("StudentID",id);
                 item.put("StudentName", results.getString(1));
-                item.put("Age", results.getInt(2));
-                item.put("Address1", results.getString(3));
-                item.put("Address2", results.getString(4));
-                item.put("Name", results.getString(5));
-                item.put("Surname", results.getString(6));
+                item.put("Address1", results.getString(2));
+                item.put("Address2", results.getString(3));
+                item.put("Name", results.getString(4));
+                item.put("Surname", results.getString(5));
             }
             return item.toString();
         } catch (Exception e) {
@@ -190,10 +189,7 @@ public class ParentController {//
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public String Pinsert(@FormDataParam("name") String name, @FormDataParam("surname") String surname,
-                          @FormDataParam("password") String password, @FormDataParam("studentID") Integer studentID, @CookieParam("token") String token) {
-        if (!ParentController.validToken(token)) {
-            return "{\"error\": \"You don't appear to be logged in.\"}";
-        }
+                          @FormDataParam("password") String password, @FormDataParam("studentID") Integer studentID) {
         try {
             if (name == null || surname == null || password == null || studentID == null) {
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
@@ -218,10 +214,7 @@ public class ParentController {//
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public String Pupdate(@FormDataParam("parentID") Integer parentID, @FormDataParam("studentID") Integer studentID, @FormDataParam("name") String name,
-                          @FormDataParam("surname") String surname, @FormDataParam("address1") String address1, @FormDataParam("address2") String address2, @CookieParam("token") String token) {
-        if (!ParentController.validToken(token)) {
-            return "{\"error\": \"You don't appear to be logged in.\"}";
-        }
+                          @FormDataParam("surname") String surname, @FormDataParam("address1") String address1, @FormDataParam("address2") String address2) {
         try {
             if (name == null || surname == null || address1 == null || address2 == null) {
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
@@ -248,10 +241,7 @@ public class ParentController {//
     @Path("Password")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String PupdateP(@FormDataParam("parentID") Integer parentID, @FormDataParam("name") String name, @FormDataParam("password") String password, @CookieParam("token") String token) {
-        if (!ParentController.validToken(token)) {
-            return "{\"error\": \"You don't appear to be logged in.\"}";
-        }
+    public String PupdateP(@FormDataParam("parentID") Integer parentID, @FormDataParam("name") String name, @FormDataParam("password") String password) {
         try {
             if (name == null || password == null) {
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
@@ -273,10 +263,7 @@ public class ParentController {//
     @Path("delete")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String Pdelete(@FormDataParam("id") Integer id, @CookieParam("token") String token) {
-        if (!ParentController.validToken(token)) {
-            return "{\"error\": \"You don't appear to be logged in.\"}";
-        }
+    public String Pdelete(@FormDataParam("id") Integer id) {
         try {
             if (id == null) {
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");

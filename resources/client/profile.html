@@ -1,10 +1,191 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Profile page</title>
+    <link rel="stylesheet" type="text/css" href="/client/css/styles.css">
+    <script src="/client/js/js.cookie.js"></script>
+    <script src="/client/js/profile.js"></script>
 </head>
-<body>
-
+<body onload="pageLoad()">
+<div id="pageHeader">
+    <p style="float: left;" id="imageDiv"></p>
+    <button style="float: right; position:sticky" id="Homepage" onclick="homepage()">Homepage</button>
+    <h1 style="text-align: center;" id="heading"></h1>
+</div>
+<div id="disStu">
+    <h2 id="name"></h2>
+    <h2 id="surname"></h2>
+    <h2 id="age"></h2>
+    <h2 id="address1"></h2>
+    <h2 id="address2"></h2>
+</div>
+<div id="disTu">
+    <h2 id="tname"></h2>
+    <h2 id="tsurname"></h2>
+    <h2 id="gender"></h2>
+    <h2 id="experience"></h2>
+    <h2 id="rating"></h2>
+</div>
+<div id="disPa">
+    <h2 id="studentID"></h2>
+    <h2 id="studentName"></h2>
+    <h2 id="paddress1"></h2>
+    <h2 id="paddress2"></h2>
+    <h2 id="pname"></h2>
+    <h2 id="psurname"></h2>
+</div>
+<div id="del">
+    <button id="update" onclick="update()">Update information</button>
+    <button id="pass" onclick="pass()">Update Password</button>
+    <button id="delete" onclick="delet()">Delete User</button>
+</div>
+<div id="editStu">
+    <h2>Editing student</h2>
+    <form id="StuForm">
+        <input type="hidden" name="studentID" id="student">
+        <div>
+            <label for="ename" class="label">name:</label>
+            <input type="text" name="name" id="ename">
+        </div>
+        <div>
+            <label for="esurname" class="label">surname:</label>
+            <input type="text" name="surname" id="esurname">
+        </div>
+        <div>
+            <label for="eage" class="label">age:</label>
+            <input type="text" name="age" id="eage">
+        </div>
+        <div>
+            <label for="egender" class="label">gender:</label>
+            <input type="text" name="gender" id="egender">
+        </div>
+        <div>
+            <label for="eaddress1" class="label">address1:</label>
+            <input type="text" name="address1" id="eaddress1">
+        </div>
+        <div>
+            <label for="eaddress2" class="label">address2:</label>
+            <input type="text" name="address2" id="eaddress2">
+        </div>
+        <div>
+            <input type="submit" value="Save" id="saveStu">
+            <input type="submit" value="Cancel" id="cancelStu">
+        </div>
+    </form>
+</div>
+<div id="editTu">
+    <h2>Editing tutor</h2>
+    <form id="TuForm">
+        <input type="hidden" name="tutorID" id="tutor">
+        <div>
+            <label for="etname" class="label">name:</label>
+            <input type="text" name="name" id="etname">
+        </div>
+        <div>
+            <label for="etsurname" class="label">surname:</label>
+            <input type="text" name="surname" id="etsurname">
+        </div>
+        <div>
+            <label for="etgender" class="label">gender:</label>
+            <input type="text" name="gender" id="etgender">
+        </div>
+        <div>
+            <label for="eexperience" class="label">experience:</label>
+            <input type="text" name="experience" id="eexperience">
+        </div>
+        <div>
+            <label for="erating" class="label">rating:</label>
+            <input type="text" name="rating" id="erating">
+        </div>
+        <div>
+            <input type="submit" value="Save" id="saveTu">
+            <input type="submit" value="Cancel" id="cancelTu">
+        </div>
+    </form>
+</div>
+<div id="editPa">
+    <h2>Editing parent</h2>
+    <form id="SubForm">
+        <input type="hidden" name="parentID" id="parent">
+        <div>
+            <label for="epname" class="label">name:</label>
+            <input type="text" name="name" id="epname">
+        </div>
+        <div>
+            <label for="epsurname" class="label">surname:</label>
+            <input type="text" name="surname" id="epsurname">
+        </div>
+        <div>
+            <label for="stud" class="label">studentID:</label>
+            <input type="text" name="studentID" id="stud">
+        </div>
+        <div>
+            <label for="epaddress1" class="label">address1:</label>
+            <input type="text" name="address1" id="epaddress1">
+        </div>
+        <div>
+            <label for="epaddress2" class="label">address2:</label>
+            <input type="text" name="address2" id="epaddress2">
+        </div>
+        <div>
+            <input type="submit" value="Save" id="savePa">
+            <input type="submit" value="Cancel" id="cancelPa">
+        </div>
+    </form>
+</div>
+<div id="passStu">
+    <h2>student password</h2>
+    <form id="StuPass">
+        <input type="hidden" name="studentID" id="pstudent">
+        <div>
+            <label for="passname" class="label">name:</label>
+            <input type="text" name="name" id="passname">
+        </div>
+        <div>
+            <label for="password" class="label">password:</label>
+            <input type="text" name="password" id="password">
+        </div>
+        <div>
+            <input type="submit" value="Save" id="savePassStu">
+            <input type="submit" value="Cancel" id="cancelPassStu">
+        </div>
+    </form>
+</div>
+<div id="passTu">
+    <h2>tutor password</h2>
+    <form id="TuPass">
+        <input type="hidden" name="tutorID" id="ptutor">
+        <div>
+            <label for="passtname" class="label">name:</label>
+            <input type="text" name="name" id="passtname">
+        </div>
+        <div>
+            <label for="tpassword" class="label">password:</label>
+            <input type="text" name="password" id="tpassword">
+        </div>
+        <div>
+            <input type="submit" value="Save" id="savePassTu">
+            <input type="submit" value="Cancel" id="cancelPassTu">
+        </div>
+    </form>
+</div>
+<div id="passPa">
+    <h2>parent password</h2>
+    <form id="PaPass">
+        <input type="hidden" name="parentID" id="pparent">
+        <div>
+            <label for="ppassname" class="label">name:</label>
+            <input type="text" name="name" id="ppassname">
+        </div>
+        <div>
+            <label for="ppassword" class="label">password:</label>
+            <input type="text" name="password" id="ppassword">
+        </div>
+        <div>
+            <input type="submit" value="Save" id="savePassPa">
+            <input type="submit" value="Cancel" id="cancelPassPa">
+        </div>
+    </form>
+</div>
 </body>
 </html>

@@ -4,7 +4,6 @@ function pageLoading() {
         + '<img src="/client/img/logo.jfif"  alt="Logo"/>';
     document.getElementById("imageDiv").innerHTML = myHTML;
     document.getElementById("heading").innerHTML ="welcome student: " + name;
-
     document.getElementById("first").style.display="block";
     document.getElementById("ChangeInfo").style.display='block';
     document.getElementById("create1").style.display='block';
@@ -250,6 +249,11 @@ function SessionO(event){
         sessHTML += '</table>';
         document.getElementById("SessionOne").innerHTML = sessHTML;
     });
+}
+
+function profile(){
+    Cookies.set("user","student");
+    window.location.href = '/client/profile.html';
 }
 
 function editSubject(event) {

@@ -251,6 +251,11 @@ function SessionO(event){
     });
 }
 
+function profile(){
+    Cookies.set("user","tutor");
+    window.location.href = '/client/profile.html';
+}
+
 function editSubject(event) {
     const id = event.target.getAttribute("data-id");
     if (id === null) {

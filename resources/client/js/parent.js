@@ -198,3 +198,8 @@ function SessionO(event){
         document.getElementById("SessionOne").innerHTML = sessHTML;
     });
 }
+
+function profile(){
+    Cookies.set("user","parent");
+    window.location.href = '/client/profile.html';
+}
