@@ -105,7 +105,7 @@ function createStu() {
     document.getElementById("gender").value = '';
     document.getElementById("address1").value = '';
     document.getElementById("address2").value = '';
-    document.getElementById("pass").value = '';
+    document.getElementById("pas").value = '';
     document.getElementById("cpass").value = '';
 
     document.getElementById("LoginBox").style.display = 'none';
@@ -114,7 +114,7 @@ function createStu() {
 }
 function saveCreateStu(event) {
     event.preventDefault();
-    if(document.getElementById("pass").value !== document.getElementById("cpass").value){
+    if(document.getElementById("pas").value !== document.getElementById("cpass").value){
         alert("passwords do not match");
     }else {
         const form = document.getElementById("StuForm");
