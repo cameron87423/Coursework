@@ -132,7 +132,6 @@ function InfoO(event){
         '<th>InfoID</th>' +
         '<th>StudentID</th>' +
         '<th>TutorID</th>' +
-        '<th>StudentID</th>' +
         '<th>Total Hours</th>' +
         '<th>Total Pay</th>' +
         '<th>Remaining Pay</th>' +
@@ -147,10 +146,9 @@ function InfoO(event){
         } else {
             for (let student of responseData) {
                 infoOHTML += `<tr>` +
-                    `<td>${student.StudentID}</td>` +
+                    `<td>${student.InfoID}</td>` +
                     `<td>${student.StudentID}</td>` +
                     `<td>${student.TutorID}</td>` +
-                    `<td>${student.StudentID}</td>` +
                     `<td>${student.THours}</td>` +
                     `<td>${student.TotalPay}</td>` +
                     `<td>${student.RemainingPay}</td>` +
@@ -169,7 +167,6 @@ function SessionO(event){
         '<tr>' +
         '<th>StudentID</th>' +
         '<th>TutorID</th>' +
-        '<th>StudentID</th>' +
         '<th>Hour(s)</th>' +
         '<th>Pay</th>' +
         '<th>Grade</th>' +
@@ -186,7 +183,6 @@ function SessionO(event){
                 sessHTML += `<tr>` +
                     `<td>${student.StudentID}</td>` +
                     `<td>${student.TutorID}</td>` +
-                    `<td>${student.StudentID}</td>` +
                     `<td>${student.Hours}</td>` +
                     `<td>${student.Pay}</td>` +
                     `<td>${student.Grade}</td>` +

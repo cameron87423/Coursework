@@ -18,7 +18,11 @@ public class ParentController {//
     @Path("check")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String check(@FormDataParam("id") int id, @FormDataParam("name") String name) {
+    public String check(@FormDataParam("id") int id, @FormDataParam("name") String name,@CookieParam("token") String token) {
+
+        if (!ParentController.validToken(token)) {
+            return "{\"error\": \"You don't appear to be logged in.\"}";
+        }
         try {
             PreparedStatement ps1 = Main.db.prepareStatement("SELECT FName FROM Students WHERE StudentID = ?");
             ps1.setInt(1, id);

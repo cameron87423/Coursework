@@ -40,7 +40,11 @@ public class TutorController{//
     @GET
     @Path("pick/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String Tpick(@PathParam("id") Integer id) {
+    public String Tpick(@PathParam("id") Integer id,@CookieParam("token") String token) {//shows the info of both the parent and the student
+
+        if (!TutorController.validToken(token)) {
+            return "{\"error\": \"You don't appear to be logged in.\"}";
+        }
         System.out.println("Tutors/pick/" + id);
         JSONObject item = new JSONObject();
         try {
@@ -68,7 +72,11 @@ public class TutorController{//
     @GET
     @Path("StudentList/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String TutorList(@PathParam("id") Integer id) {//shows the info of both the parent and the student
+    public String TutorList(@PathParam("id") Integer id,@CookieParam("token") String token) {
+
+        if (!TutorController.validToken(token)) {
+            return "{\"error\": \"You don't appear to be logged in.\"}";
+        }
         System.out.println("Tutors/StudentList/" + id);
         JSONArray list = new JSONArray();
         try {
@@ -187,7 +195,10 @@ public class TutorController{//
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public String  Tupdate(@FormDataParam("tutorID") Integer tutorID,@FormDataParam("name") String name,@FormDataParam("surname") String surname,
-                         @FormDataParam("gender") String gender,@FormDataParam("experience") Integer experience,@FormDataParam("rating") Integer rating) {
+                         @FormDataParam("gender") String gender,@FormDataParam("experience") Integer experience,@FormDataParam("rating") Integer rating ,@CookieParam("token") String token) {
+        if (!TutorController.validToken(token)) {
+            return "{\"error\": \"You don't appear to be logged in.\"}";
+        }
         try{
             if (name == null || surname == null || gender == null|| experience == null || rating == null  ){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
@@ -212,7 +223,10 @@ public class TutorController{//
     @Path("Password")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String TupdateP(@FormDataParam("tutorID") Integer tutorID,@FormDataParam("name") String name,@FormDataParam("password") String password) {
+    public String TupdateP(@FormDataParam("tutorID") Integer tutorID,@FormDataParam("name") String name,@FormDataParam("password") String password,@CookieParam("token") String token) {
+        if (!TutorController.validToken(token)) {
+            return "{\"error\": \"You don't appear to be logged in.\"}";
+        }
         try{
             if (name == null || password == null){
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
@@ -234,7 +248,10 @@ public class TutorController{//
     @Path("delete")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public String Tdelete(@FormDataParam("id") Integer id) {
+    public String Tdelete(@FormDataParam("id") Integer id,@CookieParam("token") String token) {
+        if (!TutorController.validToken(token)) {
+            return "{\"error\": \"You don't appear to be logged in.\"}";
+        }
         try {
             if (id == null) {
                 throw new Exception("One or more form data parameters are missing in the HTTP request.");
