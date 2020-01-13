@@ -16,7 +16,6 @@ function pageLoad() {
 }
 
 function login(i) {
-    debugger;
     const form = document.getElementById("loginForm");
     const formData = new FormData(form);
     if (i === 1) {
