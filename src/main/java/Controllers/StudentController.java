@@ -76,9 +76,7 @@ public class StudentController {//
     @Produces(MediaType.APPLICATION_JSON)
     public String TutorList(@PathParam("id") Integer id ,@CookieParam("token") String token) {//shows the info of both the parent and the student
 
-        if (!StudentController.validToken(token)) {
-            return "{\"error\": \"You don't appear to be logged in.\"}";
-        } else if (!ParentController.validToken(token)){
+        if (!StudentController.validToken(token) && !ParentController.validToken(token)) {
             return "{\"error\": \"You don't appear to be logged in.\"}";
         }
         System.out.println("Students/TutorList/" + id);
