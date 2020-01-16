@@ -181,7 +181,6 @@ function InfoO(event){
     event.preventDefault();
     let infoOHTML = `<table>` +
         '<tr>' +
-        '<th>InfoID</th>' +
         '<th>StudentID</th>' +
         '<th>TutorID</th>' +
         '<th>Total Hours</th>' +
@@ -198,7 +197,6 @@ function InfoO(event){
         } else {
             for (let student of responseData) {
                 infoOHTML += `<tr>` +
-                    `<td>${student.InfoID}</td>` +
                     `<td>${student.StudentID}</td>` +
                     `<td>${student.TutorID}</td>` +
                     `<td>${student.THours}</td>` +
