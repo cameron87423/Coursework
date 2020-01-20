@@ -1,6 +1,6 @@
 function pageLoad() {
     let myHTML = '<div/>'
-        +'<img src="/client/img/logo.jfif"  alt="Logo"/>'
+        +'<img src="/client/img/logo.PNG"  alt="Logo"/>'
     document.getElementById("imageDiv").innerHTML = myHTML;
     document.getElementById("sub").addEventListener("click", checker);
 }

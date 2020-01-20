@@ -2,7 +2,7 @@ function pageLoading() {
     debugger;
     let name = Cookies.get("id");
     let myHTML = '<div/>'
-        + '<img src="/client/img/logo.jfif"  alt="Logo"/>';
+        + '<img src="/client/img/logo.PNG"  alt="Logo"/>';
     document.getElementById("imageDiv").innerHTML = myHTML;
     document.getElementById("heading").innerHTML ="welcome parent: " + name;
 
