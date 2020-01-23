@@ -71,7 +71,8 @@ function logout() {
     });
 }
 function Plogout() {
-    fetch("/Parents/logout", {method: 'post'}
+    debugger;
+    fetch("/Parents/Plogout", {method: 'post'}
     ).then(response => response.json()
     ).then(responseData => {
         if (responseData.hasOwnProperty('error')) {
@@ -116,6 +117,10 @@ function saveCreateStu(event) {
     if(document.getElementById("pas").value !== document.getElementById("cpass").value){
         alert("passwords do not match");
     }else {
+        if (document.getElementById("age").value < 0) {
+            alert("Please enter correct age.");
+            return;
+        }
         const form = document.getElementById("StuForm");
         const formData = new FormData(form);
         fetch('/Students/new', {method: 'post', body: formData}
@@ -154,6 +159,14 @@ function saveCreateTu(event) {
     if(document.getElementById("tpass").value !== document.getElementById("tcpass").value){
         alert("passwords do not match");
     }else {
+        if (document.getElementById("experience").value < 0) {
+            alert("Please enter correct experience.");
+            return;
+        }
+        if (document.getElementById("rating").value > 5) {
+            alert("Please enter correct rating.");
+            return;
+        }
         const form = document.getElementById("TuForm");
         const formData = new FormData(form);
         fetch("/Tutors/new", {method: 'post', body: formData}

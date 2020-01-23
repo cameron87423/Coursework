@@ -53,9 +53,10 @@ function pageLoad() {
             document.getElementById("rating").innerHTML = responseData.Rating;
         })
     }else if(user === "parent"){
+        debugger;
         document.getElementById("disPa").style.display='block';
         document.getElementById("del").style.display='block';
-        fetch('/Parents/pick/' + Cookies.get("id"),{method: 'get'}
+        fetch('/Parents/pick/' + Cookies.get("stuid"),{method: 'get'}
         ).then(response => response.json()
         ).then(responseData => {
             document.getElementById("studentID").innerHTML = responseData.StudentID;

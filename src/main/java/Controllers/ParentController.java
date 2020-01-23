@@ -111,7 +111,7 @@ public class ParentController {//
                 throw new Exception("Parent's id is missing in the HTTP request's URL");
             }
             PreparedStatement ps = Main.db.prepareStatement("SELECT Students.FName, Students.Address1,Students.Address2, Parents.PFName, Parents.PSName " +
-                    "FROM Students JOIN Parents ON Students.StudentID = Parents.StudentID WHERE StudentID = ?");
+                    "FROM Students JOIN Parents ON Students.StudentID = Parents.StudentID WHERE Parents.StudentID = ?");
             ps.setInt(1, id);
             ResultSet results = ps.executeQuery();
             if (results.next()) {
